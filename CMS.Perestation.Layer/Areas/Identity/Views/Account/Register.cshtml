@@ -1,0 +1,96 @@
+﻿@using CMS.Models.CuraHub.IdentitySection.IdentitySectionVM;
+@model RegisterVM
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_authenticationLayout.cshtml";
+}
+
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card mb-6" style="max-width: 70%;">
+        <h1 class="text-white" style="background-color:#006d77">Register</h1>
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <form action="Register" enctype="multipart/form-data" method="post">
+            <div class="row g-0">
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="FirstName" class="form-label text-start d-block">First Name</label>
+                                    <input type="text" name="FirstName" placeholder="First Name" required="" class="form-control" id="FirstName" aria-describedby="emailHelp">
+                                    <span asp-validation-for="FirstName" class="text-danger  text-start d-block"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label for="LastName" class="form-label text-start d-block">Last Name</label>
+                                    <input type="text" name="LastName" placeholder="Last Name" required="" class="form-control" id="LastName" aria-describedby="emailHelp">
+                                    <span asp-validation-for="LastName" class="text-danger  text-start d-block"></span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Email" class="form-label text-start d-block">Email</label>
+                            <input type="text" name="Email" placeholder="Email" required="" class="form-control" id="FirstName" aria-describedby="emailHelp">
+                            <span asp-validation-for="Email" class="text-danger  text-start d-block"></span>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password" class="form-label  text-start d-block">Password</label>
+                            <input type="password" name="Password" placeholder="Password" required="" class="form-control" id="FirstName" aria-describedby="emailHelp">
+                            <span asp-validation-for="Password" class="text-danger  text-start d-block"></span>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="ConfirmPassword" class="form-label  text-start d-block">Confirm Password</label>
+                            <input type="password" name="ConfirmPassword" placeholder="Confirm Password" required="" class="form-control" id="FirstName" aria-describedby="emailHelp">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger  text-start d-block"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <img id="preview" src="~/Files/Images/profiles/Profile.png" alt="Image Preview" style="max-width: 250px; max-height: 250px;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ProfilePicture" class="form-label text-start d-block">Profile Picture</label>
+                        <input type="file" accept="image/*" class="form-control" name="ProfilePicture" id="ProfilePicture" placeholder="Profile Picture" onchange="previewImage(event)">
+                    </div>
+                </div>
+            </div>
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <button type="submit" style="width:90%" class="btn btn-primary">Regitser</button>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <p>Don't have an Account? <a href="/Identity/Account/Login"> Login Now!</a></p>
+
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+@section Scripts
+                        {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

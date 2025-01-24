@@ -1,0 +1,270 @@
+﻿@using CMS.Data.Access.Layer.Repository.IRepository
+@inject IUnitOfWork _unitOfWork
+@{
+    var specializations = _unitOfWork.SpecializationRepository.Retrive();
+    var cities = new Dictionary<string, List<string>>(); // Use a dictionary to store cities for each state
+
+    // Assuming you have a method to retrieve cities based on state
+    cities.Add("Cairo", new List<string>() { "Nasr City", "October City", "Giza", "Heliopolis" });
+    cities.Add("Alexandria", new List<string>() { "Smouha", "Moharram Bey", "Mandara", "Gleem" });
+            // ... Add other states and cities
+}
+
+@{
+    ViewData["Title"] = "Service";
+    Layout = "~/Views/Shared/_CuraHubLayout.cshtml";
+}
+<br />
+<br />
+
+<br />
+<br />
+<br />
+<br />
+<img src="~/Files/Images/فلسطين.svg" class="rounded-circle " style="width: 50px;" />
+
+<div class="card text-center mt-5" style="width:100%">
+    <div class="card-header">
+        <h2>Book an appointment with doctor</h2>
+        <h3>
+            <i class="bi bi-activity"></i>
+            Examination or procedure
+        </h3>
+
+    </div>
+    <div class="card-body" style="height:150px">
+        <div class="row">
+            <div class="col-10">
+                <div class="rounded-2 bg-white " )>
+                    <form>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-3 ms-2">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" name="query" id="SearchInput" placeholder="Search By Doctor Name">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select" aria-label="Default select example">
+                                    <option selected>Select speciality</option>
+                                    @foreach (var specialization in specializations)
+                                    {
+                                        <option value="@specialization.Id">@specialization.Name</option>
+                                    }
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-2">
+                                <select class="form-select" id="mySelect" aria-label="Default select example">
+                                    <option selected>Select State</option>
+                                    <option value="Alexandria">Alexandria</option>
+                                    <option value="Aswan">Aswan</option>
+                                    <option value="Asyut">Asyut</option>
+                                    <option value="Beheira">Beheira</option>
+                                    <option value="Beni Suef">Beni Suef</option>
+                                    <option value="Cairo">Cairo</option>
+                                    <option value="Dakahlia">Dakahlia</option>
+                                    <option value="Damietta">Damietta</option>
+                                    <option value="Faiyum">Faiyum</option>
+                                    <option value="Gharbia">Gharbia</option>
+                                    <option value="Giza">Giza</option>
+                                    <option value="Ismailia">Ismailia</option>
+                                    <option value="Kafr el-Sheikh">Kafr el-Sheikh</option>
+                                    <option value="Luxor">Luxor</option>
+                                    <option value="Matrouh">Matrouh</option>
+                                    <option value="Minya">Minya</option>
+                                    <option value="Monufia">Monufia</option>
+                                    <option value="New Valley">New Valley</option>
+                                    <option value="North Sinai">North Sinai</option>
+                                    <option value="Port Said">Port Said</option>
+                                    <option value="Qalyubia">Qalyubia</option>
+                                    <option value="Qena">Qena</option>
+                                    <option value="Red Sea">Red Sea</option>
+                                    <option value="Sohag">Sohag</option>
+                                    <option value="South Sinai">South Sinai</option>
+                                    <option value="Suez">Suez</option>
+                                    <option value="Sharqia">Sharqia</option>
+                                </select>
+
+                            </div>
+                            <div class="col-2">
+                                <select class="form-select" id="regionSelect" aria-label="Default select example">
+                                    <option selected>Select Region</option>
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-1">
+                                <button type="submit" class="btn btn-primary">Search</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-2">
+                <img style="width:50%" class="round-circle" src="~/Files/Images/doctorTool.png" />
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+<div class="card text-center mt-5" style="width:100%">
+    @* <div class="card-header"> *@
+    @*     <h2><i class="bi bi-capsule"></i> Have a Medical Question?</h2> *@
+    @* </div> *@
+    <div class="card-body">
+        <div class="row">
+            <div class="col-10">
+                <h5 class="card-title"><i class="bi bi-person-raised-hand"></i> Have a Medical Question? </h5>
+                <p class="card-text">Submit your medical question and receive an answer from a specialized doctor</p>
+                <a href="/Customer/Home/Pharmacy" class="btn btn-primary">Ask now</a>
+            </div>
+            <div class="col-2">
+                <img style="width:50%" class="round-circle" src="~/Files/Images/Q&A.jpg" />
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="card text-center mt-5" style="width:100%">
+    <div class="card-header">
+        <h2><i class="bi bi-capsule"></i> Pharmacy</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-10">
+                <h5 class="card-title">Get your medicine and your Pharmacy needs </h5>
+                <p class="card-text">with delivery to your location</p>
+                <a href="/Customer/Home/Pharmacy" class="btn btn-primary">place order</a>
+            </div>
+            <div class="col-2">
+                <img style="width:50%" class="round-circle" src="~/Files/Images/medicine-icon.png" />
+
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="card text-center mt-5" style="width:100%">
+    <div class="card-header">
+        <h2><i class="bi bi-prescription2"></i> Book an appointment with medical analysis Lab</h2>
+       
+
+    </div>
+    <div class="card-body" style="height:150px">
+        <div class="row">
+            <div class="col-10">
+                <div class="rounded-2 bg-white " )>
+                    <form>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4 ms-2">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" name="query" id="SearchInput" placeholder="Search By Medical Analysis Lab Name">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select" id="mySelect" aria-label="Default select example">
+                                    <option selected>Select State</option>
+                                    <option value="Alexandria">Alexandria</option>
+                                    <option value="Aswan">Aswan</option>
+                                    <option value="Asyut">Asyut</option>
+                                    <option value="Beheira">Beheira</option>
+                                    <option value="Beni Suef">Beni Suef</option>
+                                    <option value="Cairo">Cairo</option>
+                                    <option value="Dakahlia">Dakahlia</option>
+                                    <option value="Damietta">Damietta</option>
+                                    <option value="Faiyum">Faiyum</option>
+                                    <option value="Gharbia">Gharbia</option>
+                                    <option value="Giza">Giza</option>
+                                    <option value="Ismailia">Ismailia</option>
+                                    <option value="Kafr el-Sheikh">Kafr el-Sheikh</option>
+                                    <option value="Luxor">Luxor</option>
+                                    <option value="Matrouh">Matrouh</option>
+                                    <option value="Minya">Minya</option>
+                                    <option value="Monufia">Monufia</option>
+                                    <option value="New Valley">New Valley</option>
+                                    <option value="North Sinai">North Sinai</option>
+                                    <option value="Port Said">Port Said</option>
+                                    <option value="Qalyubia">Qalyubia</option>
+                                    <option value="Qena">Qena</option>
+                                    <option value="Red Sea">Red Sea</option>
+                                    <option value="Sohag">Sohag</option>
+                                    <option value="South Sinai">South Sinai</option>
+                                    <option value="Suez">Suez</option>
+                                    <option value="Sharqia">Sharqia</option>
+                                </select>
+
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select" id="regionSelect" aria-label="Default select example">
+                                    <option selected>Select Region</option>
+
+                                </select>
+
+                            </div>
+                            <div class="col-1">
+                                <button type="submit" class="btn btn-primary">Search</button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-2">
+                <img style="width:50%" class="round-circle" src="~/Files/Images/analytical-testing-laboratory-research-test-512.webp" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+        var cities = @Html.Raw(Json.Serialize(cities));
+
+    $(document).ready(function () {
+      $('#mySelect').change(function () {
+        var selectedState = $(this).val();
+        var regionSelect = $('#regionSelect');
+
+        // Clear previous options
+        regionSelect.empty();
+
+        if (selectedState) {
+          var availableCities = cities[selectedState];
+            regionSelect.append('<option selected>Select Region</option>');
+            regionSelect.append('<option >All Region</option>');
+          if (availableCities) {
+            for (var i = 0; i < availableCities.length; i++) {
+              regionSelect.append('<option value="' + availableCities[i] + '">' + availableCities[i] + '</option>');
+            }
+          }
+        }
+      });
+    });
+</script>
+
+
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}
+

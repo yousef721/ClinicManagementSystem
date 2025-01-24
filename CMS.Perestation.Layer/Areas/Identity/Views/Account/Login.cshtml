@@ -1,0 +1,70 @@
+﻿@using CMS.Models.CuraHub.IdentitySection.IdentitySectionVM
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_authenticationLayout.cshtml";
+}
+@model LoginVM
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card mb-6" style="width: 70%;">
+        <h1 class="text-white" style="background-color:#006d77">Login</h1>
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <form action="Login" method="post">
+            <div class="row g-0">
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="Email" class="form-label text-start d-block">Email</label>
+                            <input type="text" name="Email" placeholder="Email" required="" class="form-control" id="FirstName" aria-describedby="emailHelp">
+                            <span asp-validation-for="Email" class="text-danger  text-start d-block"></span>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password" class="form-label  text-start d-block">Password</label>
+                            <input type="password" name="Password" placeholder="Password" required="" class="form-control" id="FirstName" aria-describedby="emailHelp">
+                            <span asp-validation-for="Password" class="text-danger  text-start d-block"></span>
+
+                        </div>
+                        <div class="wthree-text text-start d-block">
+                            <label class="anim">
+                                <input asp-for="RemeberMe" type="checkbox" class="checkbox">
+                                <span>Remeber Me</span>
+                            </label>
+                            <div class="clear"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <button type="submit" style="width:90%" class="btn btn-primary">Login</button>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <p>Don't have an Account? <a href="/Identity/Account/Login"> Login Now!</a></p>
+
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('preview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+@section Scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}
