@@ -1,0 +1,33 @@
+﻿@using System.Collections.Generic;
+@using CMS.Models.Enums;
+@using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
+@model PharmacyOrderVM
+
+@{
+    ViewData["Title"] = "Pharmacy Order Details";
+}
+
+<div class="container mt-5">
+    <h2>@ViewData["Title"]</h2>
+    <div class="card shadow p-4 rounded">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Order Details</h3>
+                <p><strong>Order Id:</strong> @Model.Id</p>
+                <p><strong>Quantity:</strong> @Model.Quentity</p>
+                <p><strong>Discount:</strong> @Model.Discount</p>
+                <p><strong>Total Price:</strong> @Model.TotalPrice</p>
+                <p><strong>Shipment Status:</strong> @Model.ShipmentStatus</p>
+                <p><strong>Customer:</strong> @Model.PharmacyCustomer?.FirstName @Model.PharmacyCustomer?.LastName</p>
+                <p><strong>Delivery Representative:</strong> @Model.PharmacyDeliveryRepresentative?.FirstName @Model.PharmacyDeliveryRepresentative?.LastName</p>
+            </div>
+        </div>
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>

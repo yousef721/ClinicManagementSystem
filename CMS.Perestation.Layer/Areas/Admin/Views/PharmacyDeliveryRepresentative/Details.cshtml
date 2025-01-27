@@ -1,0 +1,15 @@
+﻿@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.PharmacyDeliveryRepresentativeVM
+
+<h1>Person Details</h1>
+
+<p><strong>First Name:</strong> @Model.FirstName</p>
+<p><strong>Last Name:</strong> @Model.LastName</p>
+<p><strong>Email: @Model.PharmacyOrders</strong>
+@foreach (var model in Model.PharmacyOrders)
+{
+    
+}
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+

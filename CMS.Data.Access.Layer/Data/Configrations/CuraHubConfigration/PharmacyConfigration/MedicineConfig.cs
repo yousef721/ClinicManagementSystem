@@ -17,38 +17,32 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.PharmacyC
             
             builder.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .IsUnicode(true);
+
             builder.Property(e => e.Description)
-                 .IsRequired()
-                 .HasMaxLength(1000)
+                 .HasMaxLength(10000)
+                 .IsRequired(false)
                  .IsUnicode(true);
 
-           
-
-            builder.Property(e => e.State)
-                .IsRequired()
-                .HasMaxLength(20)
-                .IsUnicode(true);
+            builder.Property(e => e.Status)
+                .IsRequired();
 
             builder.Property(e => e.Img)
                 .IsRequired()
-                .HasMaxLength(100)
                 .IsUnicode(true);
 
             builder.HasOne(e=>e.PharmacyCategory)
                 .WithMany(e=>e.Medicines)
-                .HasForeignKey(e=>e.PharmacyCategoryId)
-                ;
+                .HasForeignKey(e=>e.PharmacyCategoryId);
 
             builder.HasMany(e => e.MedicineOrders)
                 .WithOne(e => e.Medicine)
-                .HasForeignKey(e => e.MedicineId)
-                ;
+                .HasForeignKey(e => e.MedicineId);
+
             builder.HasOne(e => e.MedicineManufactory)
                 .WithMany(e => e.Medicines)
-                .HasForeignKey(e => e.MedicineManufactoryId)
-                ;
+                .HasForeignKey(e => e.MedicineManufactoryId);
 
             builder.ToTable("Medicines", "Pharmacy");
 

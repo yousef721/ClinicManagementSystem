@@ -59,7 +59,6 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
             }
             return RedirectToAction(nameof(Index));
         }
-
         [HttpGet]
         [Route("CreateEdit")]
         public IActionResult CreateEdit(int ClinicReceptionistId = 0)
@@ -106,11 +105,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
             ModelState.Remove("ApplicationUsers");
             ModelState.Remove("Doctor");
             ModelState.Remove("Doctors");
-
             if (ModelState.IsValid)
             {
-
-
                 var clinicReceptionist = _mapper.Map<ClinicReceptionist>(clinicReceptionistCreateEditVM);
 
                 _unitOfWork.ClinicReceptionistRepository.Create(clinicReceptionist);

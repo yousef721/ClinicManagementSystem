@@ -1,9 +1,6 @@
 using CMS.Data.Access.Layer.Data;
 using CMS.Data.Access.Layer.Repository;
 using CMS.Data.Access.Layer.Repository.IRepository;
-
-//using CMS.Data.Access.Layer.Repository;
-//using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.IdentitySection;
 using CMS.Perestation.Layer.DbInitilization;
 using Microsoft.AspNetCore.Identity;
@@ -22,9 +19,9 @@ namespace CMS.Perestation.Layer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            
             builder.Services.AddDbContext<ApplicationDbContext>
-   (options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            (options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -65,8 +62,6 @@ namespace CMS.Perestation.Layer
             service.Initilizer();
 
             app.MapStaticAssets();
-
-            
 
             app.MapControllerRoute(
                 name: "default",

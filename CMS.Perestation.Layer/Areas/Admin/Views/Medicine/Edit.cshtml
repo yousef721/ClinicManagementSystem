@@ -1,0 +1,78 @@
+﻿@using CMS.Models.CuraHub.PharmacySection
+@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.MedicineVM
+
+@{
+    ViewData["Title"] = "Edit Medicine";
+}
+
+<div class="container mt-5">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card shadow p-4 rounded">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group ">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" type="number" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-6">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" type="number" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MedicineManufactory.Name" class="form-label">Select Manufactory</label>
+                    <select class="form-control" asp-for="MedicineManufactory.Name">
+                        <option value="">Select Manufactory</option>
+                        @foreach (var item in (List<MedicineManufactory>)ViewData["MedicineManufactory"])
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="MedicineManufactory.Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PharmacyCategory.Name" class="form-label">Select Pharmacy Category</label>
+                    <select class="form-control" asp-for="PharmacyCategory.Name">
+                        <option value="">Select Pharmacy Category</option>
+                        @foreach (var item in (List<PharmacyCategory>)ViewData["MedicineCategory"])
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="PharmacyCategory.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="File" class="control-label">Image</label>
+                <input asp-for="File" class="form-control" type="file" />
+                <span asp-validation-for="File" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Edit</button>
+            <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

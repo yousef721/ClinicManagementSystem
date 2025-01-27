@@ -1,0 +1,38 @@
+﻿@model List<CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.MedicineVM>
+
+@{
+    ViewData["Title"] = "Medicine List";
+}
+<div class="container mt-5">
+    <h1 >@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn btn-primary mb-3">Add New Medicine</a>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Category</th>
+                <th>Manufactory</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var medicine in Model)
+            {
+                <tr>
+                    <td>@medicine.Name</td>
+                    <td>@medicine.Price.ToString("C")</td>
+                    <td>@medicine.Quantity</td>
+                    <td>@medicine.PharmacyCategory.Name</td>
+                    <td>@medicine.MedicineManufactory.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@medicine.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@medicine.Id" class="btn btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@medicine.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

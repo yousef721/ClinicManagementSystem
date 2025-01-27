@@ -10,6 +10,5 @@ namespace CMS.Models.CuraHub.PharmacySection
     public class Pharmacist : Medical
     {
         public double Salary { get; set; }
-
     }
 }

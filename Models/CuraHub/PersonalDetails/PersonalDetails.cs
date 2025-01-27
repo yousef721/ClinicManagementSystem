@@ -13,7 +13,6 @@ namespace CMS.Models.CuraHub.PersonalDetails
 
     public abstract class PersonalDetails
     {
-
         public int Id { get; set; }
 
         public string FirstName { get; set; } = null!;
@@ -26,8 +25,5 @@ namespace CMS.Models.CuraHub.PersonalDetails
         public string City { get; set; } = null!;
         public string Region { get; set; } = null!;
         public string Street { get; set; } = null!;
-
-
-
     }
 }

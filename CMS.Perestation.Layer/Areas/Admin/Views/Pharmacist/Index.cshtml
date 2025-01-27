@@ -1,0 +1,36 @@
+﻿@model List<CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.PharmacistVM>
+
+<div class="mb-3 d-flex align-items-center justify-content-between">
+    <h1>Pharmacist</h1>
+    <a asp-action="Create" class="btn btn-primary">Create New Pharmacist</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Salary</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pharmacist in Model)
+        {
+            <tr>
+                <td>@pharmacist.Id</td>
+                <td>@pharmacist.FirstName</td>
+                <td>@pharmacist.LastName</td>
+                <td>@pharmacist.Salary</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@pharmacist.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@pharmacist.Id" class="btn btn-warning">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@pharmacist.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
