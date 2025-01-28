@@ -1,11 +1,83 @@
 ﻿@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.PharmacistVM
 
-<h1>Person Details</h1>
+<div class="container mt-5">
+    <h2>Pharmacist @Model.FirstName Details</h2>
+    <div class="card shadow-lg p-4 rounded">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <dl class="row">
+                    <dt class="col-sm-3 font-weight-bold">First Name</dt>
+                    <dd class="col-sm-9">@Model.FirstName</dd>
 
-<p><strong>First Name:</strong> @Model.FirstName</p>
-<p><strong>Last Name:</strong> @Model.LastName</p>
-<p><strong>Salary:</strong> @Model.Salary</p>
+                    <dt class="col-sm-3 font-weight-bold">Last Name</dt>
+                    <dd class="col-sm-9">@Model.LastName</dd>
 
-<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <dt class="col-sm-3 font-weight-bold">Email</dt>
+                    <dd class="col-sm-9">@Model.Email</dd>
 
+                    <dt class="col-sm-3 font-weight-bold">Phone</dt>
+                    <dd class="col-sm-9">@Model.Phone</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">State</dt>
+                    <dd class="col-sm-9">@Model.State</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">City</dt>
+                    <dd class="col-sm-9">@Model.City</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Region</dt>
+                    <dd class="col-sm-9">@Model.Region</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Street</dt>
+                    <dd class="col-sm-9">@Model.Street</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Gender</dt>
+                    <dd class="col-sm-9">@Model.Gender</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Blood Type</dt>
+                    <dd class="col-sm-9">@Model.BloodType</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Date of Birth</dt>
+                    <dd class="col-sm-9">@Model.DateOfBirth</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Profile Picture</dt>
+                    <dd class="col-sm-9">
+                        <img src="~/Files/Images/@Model.ProfilePicture" alt="Profile Picture" class="img-fluid" style="max-width:200px; max-height:200px;" />
+                    </dd>
+                    <dt class="col-sm-3 font-weight-bold">National ID Number</dt>
+                    <dd class="col-sm-9">@Model.PersonalNationalIDNumber</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">National ID Card</dt>
+                    <dd class="col-sm-9">
+                        <img src="~/Files/Images/@Model.PersonalNationalIDCard" alt="Profile Picture" class="img-fluid" style="max-width:200px; max-height:200px;" />
+                    </dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Marital Status</dt>
+                    <dd class="col-sm-9">@Model.MaritalStatus</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Start Work</dt>
+                    <dd class="col-sm-9">@Model.StartWork</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">End Work</dt>
+                    <dd class="col-sm-9">@Model.EndWork</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Application User ID</dt>
+                    <dd class="col-sm-9">@Model.ApplicationUserId</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Experience Years</dt>
+                    <dd class="col-sm-9">@Model.ExperienceYears</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Medical Degree</dt>
+                    <dd class="col-sm-9">@Model.MedicalDegree</dd>
+
+                    <dt class="col-sm-3 font-weight-bold">Salary</dt>
+                    <dd class="col-sm-9">@Model.Salary</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

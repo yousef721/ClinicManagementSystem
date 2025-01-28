@@ -29,13 +29,10 @@ namespace CMS.Models.CuraHub.PersonalDetails.EmployeeSection
         [RegularExpression("^(Single|Married)$", ErrorMessage = "Marital Status must be 'Single' or 'Married'.")]
         public string MaritalStatus { get; set; } = null!;
 
-
         public TimeOnly StartWork { get; set; }
         public TimeOnly EndWork { get; set; }
 
         public string ApplicationUserId { get; set; } = null!;
-
-
 
     }
 }

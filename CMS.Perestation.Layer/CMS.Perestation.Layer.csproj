@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas/Admin/Views/PharmacyCustomer/" />
     <Folder Include="Areas/Admin/Views/PharmacyDeliveryRepresentative/" />
     <Folder Include="Areas\Admin\Controllers\CuraHub\MedicalAnalysis\" />
     <Folder Include="Areas\Admin\Controllers\CuraHub\Q&amp;A\" />

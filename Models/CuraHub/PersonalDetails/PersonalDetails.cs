@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace CMS.Models.CuraHub.PersonalDetails
 {
     [NotMapped]
-
     public abstract class PersonalDetails
     {
         public int Id { get; set; }

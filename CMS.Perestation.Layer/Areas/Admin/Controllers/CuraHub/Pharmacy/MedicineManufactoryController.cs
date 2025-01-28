@@ -68,8 +68,11 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [Route("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(MedicineManufactoryVM manufactoryVM)
+        public IActionResult Edit(int id, MedicineManufactoryVM manufactoryVM)
         {
+            if (id != manufactoryVM.Id)
+                return BadRequest();
+                
             if (ModelState.IsValid)
             {
                 var manufactory = _mapper.Map<MedicineManufactory>(manufactoryVM);

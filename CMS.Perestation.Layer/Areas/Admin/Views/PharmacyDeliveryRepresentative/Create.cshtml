@@ -1,19 +1,164 @@
-﻿@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.PharmacyDeliveryRepresentativeVM
+﻿@using CMS.Utitlities.StaticData
+@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.PharmacyDeliveryRepresentativeVM
+@{
+    List<string> BloodTypes = ["A+","A-","B+","B-", "AB+", "AB-", "O+","O-" ];
+}
+@{
+    ViewData["Title"] = "Create Delivery";
+}
 
-<h1>@ViewData["Title"]</h1>
-
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="container mt-5">
+    <h1>@ViewData["Title"]</h1>
+    <div class="card shadow p-4 rounded">
+        <form asp-action="Create" method="post" class="needs-validation" enctype="multipart/form-data">
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex  w-50">
+                    <input asp-for="FirstName" class="form-control me-4" type="text" placeholder="First Name"/>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <input asp-for="LastName" class="form-control" type="text" placeholder="Last Name"/>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex w-50">
+                    <input asp-for="Email" class="form-control me-4" type="email" placeholder="Email"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <input asp-for="Phone" class="form-control" type="tel" placeholder="Phone Number"/>
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex w-50">
+                    <select class="form-control me-4" asp-for="State">
+                        <option selected>Select State</option>
+                        <option value="Alexandria">Alexandria</option>
+                        <option value="Aswan">Aswan</option>
+                        <option value="Asyut">Asyut</option>
+                        <option value="Beheira">Beheira</option>
+                        <option value="Beni Suef">Beni Suef</option>
+                        <option value="Cairo">Cairo</option>
+                        <option value="Dakahlia">Dakahlia</option>
+                        <option value="Damietta">Damietta</option>
+                        <option value="Faiyum">Faiyum</option>
+                        <option value="Gharbia">Gharbia</option>
+                        <option value="Giza">Giza</option>
+                        <option value="Ismailia">Ismailia</option>
+                        <option value="Kafr el-Sheikh">Kafr el-Sheikh</option>
+                        <option value="Luxor">Luxor</option>
+                        <option value="Matrouh">Matrouh</option>
+                        <option value="Minya">Minya</option>
+                        <option value="Monufia">Monufia</option>
+                        <option value="New Valley">New Valley</option>
+                        <option value="North Sinai">North Sinai</option>
+                        <option value="Port Said">Port Said</option>
+                        <option value="Qalyubia">Qalyubia</option>
+                        <option value="Qena">Qena</option>
+                        <option value="Red Sea">Red Sea</option>
+                        <option value="Sohag">Sohag</option>
+                        <option value="South Sinai">South Sinai</option>
+                        <option value="Suez">Suez</option>
+                        <option value="Sharqia">Sharqia</option>
+                    </select>
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <select class="form-control" asp-for="City">
+                        <option selected>Select City</option>
+                        <option value="ObourCity">ObourCity</option>
+                        <option value="NaserCity">NaserCity</option>
+                        <option value="Madinty">Madinty</option>
+                        <option value="Elasama-Eldaryia">Elasama-Eldaryia</option>
+                        <option value="El-Tgmoa El-Khames">El-Tgmoa El-Khames</option>
+                        <option value="El-Salam">El-Salam</option>
+                    </select>
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex w-50">
+                    <input asp-for="Region" class="form-control me-4" type="text" placeholder="Region"/>
+                    <span asp-validation-for="Region" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <input asp-for="Street" class="form-control" type="text" placeholder="Street"/>
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex w-50">
+                    <label asp-for="Gender" class="control-label me-5">Gender</label>
+                    <input asp-for="Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Male" checked/>
+                    <label class="form-check-label me-2" asp-for="Gender">
+                        Male
+                    </label>
+                    <input asp-for="Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Female"/>
+                    <label class="form-check-label me-2" asp-for="Gender">
+                        Female
+                    </label>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <label asp-for="MaritalStatus" class="control-label me-5">Marital Status</label>
+                    <input asp-for="MaritalStatus" class="form-control form-check-input me-1" type="radio" value="@MaritalStatus.Single" checked/>
+                    <label class="form-check-label me-2" asp-for="MaritalStatus">
+                        Single
+                    </label>
+                    <input asp-for="MaritalStatus" class="form-control form-check-input me-1" type="radio" value="@MaritalStatus.Married"/>
+                    <label class="form-check-label me-2" asp-for="MaritalStatus">
+                        Married
+                    </label>
+                    <span asp-validation-for="MaritalStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex align-items-center w-50 me-3">
+                    <label asp-for="DateOfBirth" class="control-label me-1"></label>
+                    <input asp-for="DateOfBirth" class="form-control" type="date"/>
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex align-items-center w-50 me-3">
+                    <label asp-for="StartWork" class="control-label me-1"></label>
+                    <input asp-for="StartWork" class="form-control" type="time"/>
+                    <span asp-validation-for="StartWork" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex align-items-center w-50">
+                    <label asp-for="EndWork" class="control-label me-1"></label>
+                    <input asp-for="EndWork" class="form-control" type="time"/>
+                    <span asp-validation-for="EndWork" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex w-50">
+                    <input asp-for="PersonalNationalIDNumber" class="form-control me-3" type="text" placeholder="Personal National ID Number"/>
+                    <span asp-validation-for="PersonalNationalIDNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <input asp-for="FileNationalIDCard" class="form-control me-3" type="file" placeholder="Personal National ID Card"/>
+                    <span asp-validation-for="FileNationalIDCard" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <input asp-for="ApplicationUserId" class="form-control" type="text" placeholder="Application User Id"/>
+                    <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3">
+                <div class="form-group d-flex align-items-center w-50 me-4">
+                    <label asp-for="FileProfile" class="control-label me-1">Photo</label>
+                    <input asp-for="FileProfile" class="form-control" type="file"/>
+                    <span asp-validation-for="FileProfile" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex w-50">
+                    <input asp-for="Salary" class="form-control" type="number" placeholder="Salary"/>
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Create</button>
+            <a asp-action="Index" class="btn btn-secondary mt-4">Cancel</a>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+</div>
 

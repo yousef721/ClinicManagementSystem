@@ -13,7 +13,7 @@ namespace CMS.Models.CuraHub.PharmacySection
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; } = null!;
-        public int Status { get; set; }
+        public string Status { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
         public string Img { get; set; }

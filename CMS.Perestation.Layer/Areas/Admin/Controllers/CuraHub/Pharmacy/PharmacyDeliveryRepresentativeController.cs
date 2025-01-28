@@ -37,18 +37,50 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PharmacyDeliveryRepresentativeVM pharmacyDeliveryRepresentativeVM)
+        public IActionResult Create(PharmacyDeliveryRepresentativeVM PharmacyDeliveryVM)
         {
+            ModelState.Remove("ProfilePicture");
+            ModelState.Remove("PersonalNationalIDCard");
             if (ModelState.IsValid)
             {
-                var pharmacyDeliveryRepresentative = _mapper.Map<PharmacyDeliveryRepresentative>(pharmacyDeliveryRepresentativeVM);
-                _unitOfWork.PharmacyDeliveryRepresentativeRepository.Create(pharmacyDeliveryRepresentative);
+                if (PharmacyDeliveryVM.FileProfile != null && PharmacyDeliveryVM.FileProfile.Length > 0)
+                {
+                    // Generate name
+                    var fileProfile = Guid.NewGuid().ToString() + Path.GetExtension(PharmacyDeliveryVM.FileProfile.FileName);
+
+                    // Save in wwwroot
+                    var filePathProfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileProfile);
+
+                    using (var stream = System.IO.File.Create(filePathProfile))
+                    {
+                        PharmacyDeliveryVM.FileProfile.CopyTo(stream);
+                    }
+                    // Save in db
+                    PharmacyDeliveryVM.ProfilePicture = fileProfile;
+                }
+                if (PharmacyDeliveryVM.FileNationalIDCard != null && PharmacyDeliveryVM.FileNationalIDCard.Length > 0)
+                {
+                    // Generate name
+                    var fileCard = Guid.NewGuid().ToString() + Path.GetExtension(PharmacyDeliveryVM.FileNationalIDCard.FileName);
+
+                    // Save in wwwroot
+                    var filePathCard = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileCard);
+
+                    using (var stream = System.IO.File.Create(filePathCard))
+                    {
+                        PharmacyDeliveryVM.FileNationalIDCard.CopyTo(stream);
+                    }
+                    // Save in db
+                    PharmacyDeliveryVM.PersonalNationalIDCard = fileCard;
+                }
+                var PharmacyDelivery = _mapper.Map<PharmacyDeliveryRepresentative>(PharmacyDeliveryVM);
+                _unitOfWork.PharmacyDeliveryRepresentativeRepository.Create(PharmacyDelivery);
                 _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(pharmacyDeliveryRepresentativeVM);
+            return View(PharmacyDeliveryVM);
         }
+
 
         [HttpGet]
         [Route("Edit")]
@@ -64,17 +96,64 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [HttpPost]
         [Route("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PharmacyDeliveryRepresentativeVM pharmacyDeliveryRepresentativeVM)
+        public IActionResult Edit(PharmacyDeliveryRepresentativeVM PharmacyDeliveryVM)
         {
+            ModelState.Remove("ProfilePicture");
+            ModelState.Remove("PersonalNationalIDCard");
+            var oldDeliveryPhoto = _unitOfWork.PharmacyDeliveryRepresentativeRepository.RetriveItem(e => e.Id == PharmacyDeliveryVM.Id, trancked: false);
             if (ModelState.IsValid)
             {
-                var pharmacyDeliveryRepresentative = _mapper.Map<PharmacyDeliveryRepresentative>(pharmacyDeliveryRepresentativeVM);
+                if (PharmacyDeliveryVM.FileProfile != null && PharmacyDeliveryVM.FileProfile.Length > 0)
+                {
+                    // Generate name
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(PharmacyDeliveryVM.FileProfile.FileName);
+
+                    // Save in wwwroot
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileName);
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        PharmacyDeliveryVM.FileProfile.CopyTo(stream);
+                    }
+
+                    // Delete old img
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", oldDeliveryPhoto.ProfilePicture);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    // Save new img
+                    PharmacyDeliveryVM.ProfilePicture = fileName;
+                }
+                if (PharmacyDeliveryVM.FileNationalIDCard != null && PharmacyDeliveryVM.FileNationalIDCard.Length > 0)
+                {
+                    // Generate name
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(PharmacyDeliveryVM.FileNationalIDCard.FileName);
+
+                    // Save in wwwroot
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileName);
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        PharmacyDeliveryVM.FileNationalIDCard.CopyTo(stream);
+                    }
+
+                    // Delete old img
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", oldDeliveryPhoto.PersonalNationalIDCard);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                    // Save new img
+                    PharmacyDeliveryVM.PersonalNationalIDCard = fileName;
+                }
+                var pharmacyDeliveryRepresentative = _mapper.Map<PharmacyDeliveryRepresentative>(PharmacyDeliveryVM);
                 _unitOfWork.PharmacyDeliveryRepresentativeRepository.Update(pharmacyDeliveryRepresentative);
                 _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(pharmacyDeliveryRepresentativeVM);
+            return View(PharmacyDeliveryVM);
         }
         [HttpGet]
         [Route("Details")]
@@ -92,10 +171,18 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            var person = _unitOfWork.PharmacyDeliveryRepresentativeRepository.RetriveItem(p => p.Id == id);
-            if (person == null) return NotFound();
+            var delivery = _unitOfWork.PharmacyDeliveryRepresentativeRepository.RetriveItem(p => p.Id == id);
+            if (delivery == null) return NotFound();
+            if (System.IO.File.Exists(delivery.ProfilePicture))
+            {
+                System.IO.File.Delete(delivery.ProfilePicture);
+            }
+            if (System.IO.File.Exists(delivery.PersonalNationalIDCard))
+            {
+                System.IO.File.Delete(delivery.PersonalNationalIDCard);
+            }
 
-            _unitOfWork.PharmacyDeliveryRepresentativeRepository.Delete(person);
+            _unitOfWork.PharmacyDeliveryRepresentativeRepository.Delete(delivery);
             _unitOfWork.Commit();
             return RedirectToAction(nameof(Index));
         }

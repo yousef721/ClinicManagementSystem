@@ -49,7 +49,6 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.MedicalAn
                 .HasMaxLength(100)
                 .IsUnicode(true);
 
-
             builder.Property(e => e.Gender)
                 .IsRequired()
                 .HasMaxLength(10)
@@ -65,12 +64,6 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.MedicalAn
             builder.Property(e => e.PersonalNationalIDNumber)
                 .HasMaxLength(100)
                 .IsUnicode(true);
-
-            builder.Property(e => e.MaritalStatus)
-                .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(true);
-
 
             builder.HasMany(e => e.MedicalAnalysisTestResults)
                 .WithOne(e => e.MedicalAnalysisLabCustomer)

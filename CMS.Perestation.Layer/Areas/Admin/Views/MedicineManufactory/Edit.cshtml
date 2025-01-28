@@ -8,12 +8,12 @@
     <h1>@ViewData["Title"]</h1>
     <div class="card shadow p-4 rounded">
         <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
             <button type="submit" class="btn btn-primary mt-3">Save</button>
             <a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
         </form>

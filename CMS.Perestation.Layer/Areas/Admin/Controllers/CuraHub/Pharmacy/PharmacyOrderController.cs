@@ -32,6 +32,8 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [Route("Create")]
         public IActionResult Create()
         {
+            ViewData["PharmacyCustomer"] = _unitOfWork.PharmacyCustomerRepository.Retrive().ToList();
+            ViewData["PharmacyDelivery"] = _unitOfWork.PharmacyDeliveryRepresentativeRepository.Retrive().ToList();
             return View();
         }
 

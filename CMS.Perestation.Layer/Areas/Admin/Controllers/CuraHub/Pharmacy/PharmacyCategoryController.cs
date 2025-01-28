@@ -56,27 +56,27 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             if (category == null)
                 return NotFound();
 
-            var viewModel = _mapper.Map<PharmacyCategoryVM>(category);
-            return View(viewModel);
+            var pharmacyCategoryVM = _mapper.Map<PharmacyCategoryVM>(category);
+            return View(pharmacyCategoryVM);
         }
 
         [HttpPost]
         [Route("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, PharmacyCategoryVM model)
+        public IActionResult Edit(int id, PharmacyCategoryVM pharmacyCategoryVM)
         {
-            if (id != model.Id)
+            if (id != pharmacyCategoryVM.Id)
                 return BadRequest();
 
             if (ModelState.IsValid)
             {
-                var category = _mapper.Map<PharmacyCategory>(model);
+                var category = _mapper.Map<PharmacyCategory>(pharmacyCategoryVM);
                 _unitOfWork.PharmacyCategoryRepository.Update(category);
                 _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(model);
+            return View(pharmacyCategoryVM);
         }
         [HttpGet]
         [Route(nameof(Details))]
@@ -85,7 +85,6 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             var category =  _unitOfWork.PharmacyCategoryRepository.RetriveItem(e => e.Id == id);
             if (category == null)
                 return NotFound();
-
             var viewModel = _mapper.Map<PharmacyCategoryVM>(category);
             return View(viewModel);
         }

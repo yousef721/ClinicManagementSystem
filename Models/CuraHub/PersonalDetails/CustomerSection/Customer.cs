@@ -12,7 +12,11 @@ namespace CMS.Models.CuraHub.PersonalDetails.CustomerSection
 
     public abstract class Customer : PersonalDetails
     {
-
-
+        public string Gender { get; set; } = null!;
+        public string ProfilePicture { get; set; } = null!;
+        public string PersonalNationalIDNumber { get; set; } = null!;
+        public string PersonalNationalIDCard { get; set; } = null!;
+        public string? BloodType { get; set; }
+        public DateOnly DateOfBirth { get; set; }
     }
 }

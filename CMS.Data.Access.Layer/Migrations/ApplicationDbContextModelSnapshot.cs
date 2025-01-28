@@ -1032,7 +1032,7 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateOnly>("DateOfbirth")
+                    b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
@@ -1059,18 +1059,14 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("MaritalStatus")
+                    b.Property<string>("PersonalNationalIDCard")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("PersonalNationalIDCard")
-                        .HasMaxLength(100)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("PersonalNationalIDNumber")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
@@ -1080,6 +1076,10 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Region")
                         .IsRequired()
@@ -1974,11 +1974,17 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BloodType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -1992,17 +1998,33 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PersonalNationalIDCard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PersonalNationalIDNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Region")
                         .IsRequired()
@@ -2040,7 +2062,6 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BloodType")
-                        .IsRequired()
                         .HasMaxLength(5)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(5)");

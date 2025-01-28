@@ -2,6 +2,7 @@ using AutoMapper;
 using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.PharmacySection;
 using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
+using CMS.Utitlities.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -34,18 +35,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         {
             var pharmacyCategories = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
             var manufactories = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            List<PharmacyCategoryVM> tempPharmacy = new List<PharmacyCategoryVM>();
-            List<MedicineManufactoryVM> tempManufactory = new List<MedicineManufactoryVM>();
-            foreach (var pharmacy in pharmacyCategories)
-            {
-                tempPharmacy.Add(_mapper.Map<PharmacyCategoryVM>(pharmacy));
-            }
-            foreach (var manufactory in manufactories)
-            {
-                tempManufactory.Add(_mapper.Map<MedicineManufactoryVM>(manufactory));
-            }
-            ViewData["PharmacyCategory"] = tempPharmacy;
-            ViewData["MedicineManufactory"] = tempManufactory;
+            ViewData["PharmacyCategory"] = pharmacyCategories;
+            ViewData["MedicineManufactory"] = manufactories;
             return View();
         }
         [HttpPost]
@@ -54,8 +45,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         public ActionResult Create(MedicineVM medicineVM)
         {
             ModelState.Remove("Img");
-            ModelState.Remove("PharmacyCategory.Name");
-            ModelState.Remove("MedicineManufactory.Name");
+            ModelState.Remove("PharmacyCategory");
+            ModelState.Remove("MedicineManufactory");
             if (ModelState.IsValid)
             {
                 if (medicineVM.File != null && medicineVM.File.Length > 0)
