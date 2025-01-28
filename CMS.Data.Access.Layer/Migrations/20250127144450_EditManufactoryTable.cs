@@ -54,7 +54,6 @@ namespace CMS.Data.Access.Layer.Migrations
                 oldType: "nvarchar(100)",
                 oldMaxLength: 100);
         }
-
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {

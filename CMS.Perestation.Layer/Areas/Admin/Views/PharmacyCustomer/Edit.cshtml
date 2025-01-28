@@ -112,8 +112,14 @@
                     <span asp-validation-for="PersonalNationalIDNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex align-items-center w-75">
-                    <label asp-for="FileProfile" class="control-label w-25">Photo CardID</label>
+                    <label asp-for="FileNationalIDCard" class="control-label w-25">Photo CardID</label>
                     <input asp-for="FileNationalIDCard" class="form-control w-100" type="file" placeholder="Personal National ID Card"/>
+                    @if (Model.PersonalNationalIDCard != null)
+                    {
+                        <div class="ms-1">
+                            <img src="~/Files/Images/@Model.PersonalNationalIDCard" alt="Profile Photo" class="img-thumbnail" style="width: 50px; height: 50px;" />
+                        </div>
+                    }
                     <span asp-validation-for="FileNationalIDCard" class="text-danger"></span>
                 </div>
             </div>
@@ -121,6 +127,12 @@
                 <div class="form-group d-flex align-items-center w-100">
                     <label asp-for="FileProfile" class="control-label me-3">Photo</label>
                     <input asp-for="FileProfile" class="form-control" type="file"/>
+                    @if (Model.ProfilePicture != null)
+                    {
+                        <div class="ms-1">
+                            <img src="~/Files/Images/@Model.ProfilePicture" alt="Profile Photo" class="img-thumbnail" style="width: 50px; height: 50px;" />
+                        </div>
+                    }
                     <span asp-validation-for="FileProfile" class="text-danger"></span>
                 </div>
             </div>

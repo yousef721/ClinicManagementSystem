@@ -47,7 +47,7 @@
                     <label asp-for="MedicineManufactoryId" class="form-label">Select Manufactory</label>
                     <select class="form-control" asp-for="MedicineManufactoryId">
                         <option value="">Select Manufactory</option>
-                        @foreach (var item in (List<PharmacyCategory>)ViewData["PharmacyCategory"])
+                        @foreach (var item in (List<MedicineManufactory>)ViewData["MedicineManufactory"])
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
@@ -58,7 +58,7 @@
                     <label asp-for="PharmacyCategoryId" class="form-label">Select Pharmacy Category</label>
                     <select class="form-control" asp-for="PharmacyCategoryId">
                         <option value="">Select Pharmacy Category</option>
-                        @foreach (var item in (List<MedicineManufactory>)ViewData["MedicineManufactory"])
+                        @foreach (var item in (List<PharmacyCategory>)ViewData["PharmacyCategory"])
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
@@ -68,11 +68,23 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="File" class="control-label">Image</label>
-                <input asp-for="File" class="form-control" type="file" />
-                <div class="invalid-feedback">
-                    <span asp-validation-for="File"></span>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="File" class="control-label">Image</label>
+                    <input asp-for="File" class="form-control" type="file" />
+                    <div class="invalid-feedback">
+                        <span asp-validation-for="File"></span>
+                    </div>
                 </div>
+                @* <div class="col-md-6 mb-3">
+                    <label asp-for="Status" class="control-label me-3">Select Status</label>
+                    <input asp-for="Status" class="form-control me-1" type="radio"/>
+                    <label asp-for="Status" class="control-label me-2">Box</label>
+                    <input asp-for="Status" class="form-control me-1" type="radio"/>
+                    <label asp-for="Status" class="control-label">Strip</label>
+                    <div class="invalid-feedback">
+                        <span asp-validation-for="Status"></span>
+                    </div>
+                </div> *@
             </div>
             <button type="submit" class="btn btn-primary mt-3">Create</button>
             <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>

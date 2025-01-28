@@ -26,8 +26,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         public ActionResult Index()
         {
             var medicine = _uintOfWork.MedicineRepository.Retrive(includeProps: [e => e.MedicineManufactory, e => e.PharmacyCategory]).ToList();
-            var viewModel = _mapper.Map<List<MedicineVM>>(medicine);
-            return View(viewModel);
+            var medicineVM = _mapper.Map<List<MedicineVM>>(medicine);
+            return View(medicineVM);
         }
         [HttpGet]
         [Route("Create")]
@@ -82,7 +82,7 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             var medicine = _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == id);
             var medicineVM = _mapper.Map<MedicineVM>(medicine);
             ViewData["MedicineManufactory"] = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            ViewData["MedicineCategory"] = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
+            ViewData["PharmacyCategory"] = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
             return View(medicineVM);
         }
         [HttpPost]
@@ -93,7 +93,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             ModelState.Remove("Img");
             ModelState.Remove("PharmacyCategory");
             ModelState.Remove("Manufactories");
-            var oldMedicine = _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == medicineVM.Id);
+            ModelState.Remove("File");
+            var oldMedicine = _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == medicineVM.Id, trancked: false);
             if (ModelState.IsValid)
             {
                 if (medicineVM.File != null && medicineVM.File.Length > 0)
@@ -117,6 +118,9 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
                     }
                     // Save new img
                     medicineVM.Img = fileName;
+                } else
+                {
+                    medicineVM.Img = oldMedicine.Img;
                 }
                 var medicine = _mapper.Map<Medicine>(medicineVM);
                 _uintOfWork.MedicineRepository.Update(medicine);
@@ -125,14 +129,14 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             }
             var pharmacyCategories = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
             var manufactories = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            ViewData["PharmacyCategory"] = _mapper.Map<List<PharmacyCategoryVM>>(pharmacyCategories);
-            ViewData["MedicineManufactory"] = _mapper.Map<List<MedicineManufactoryVM>>(manufactories);
+            ViewData["PharmacyCategory"] = pharmacyCategories;
+            ViewData["MedicineManufactory"] = manufactories;
             return View(medicineVM);
         }
         [Route(nameof(Details))]
         public ActionResult Details(int id)
         {
-            var medicine =  _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == id);
+            var medicine =  _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == id, [e => e.MedicineManufactory, e => e.PharmacyCategory]);
             if(medicine != null)
             {
                 var medicineVM = _mapper.Map<MedicineVM>(medicine);

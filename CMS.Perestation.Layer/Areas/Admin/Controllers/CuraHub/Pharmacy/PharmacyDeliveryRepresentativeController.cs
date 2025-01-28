@@ -100,6 +100,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         {
             ModelState.Remove("ProfilePicture");
             ModelState.Remove("PersonalNationalIDCard");
+            ModelState.Remove("FileProfile");
+            ModelState.Remove("FileNationalIDCard");
             var oldDeliveryPhoto = _unitOfWork.PharmacyDeliveryRepresentativeRepository.RetriveItem(e => e.Id == PharmacyDeliveryVM.Id, trancked: false);
             if (ModelState.IsValid)
             {
@@ -124,6 +126,10 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
                     }
                     // Save new img
                     PharmacyDeliveryVM.ProfilePicture = fileName;
+                } else
+                {
+                    PharmacyDeliveryVM.ProfilePicture = oldDeliveryPhoto.ProfilePicture;
+
                 }
                 if (PharmacyDeliveryVM.FileNationalIDCard != null && PharmacyDeliveryVM.FileNationalIDCard.Length > 0)
                 {
@@ -146,6 +152,10 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
                     }
                     // Save new img
                     PharmacyDeliveryVM.PersonalNationalIDCard = fileName;
+                } else
+                {
+                    PharmacyDeliveryVM.PersonalNationalIDCard = oldDeliveryPhoto.PersonalNationalIDCard;
+
                 }
                 var pharmacyDeliveryRepresentative = _mapper.Map<PharmacyDeliveryRepresentative>(PharmacyDeliveryVM);
                 _unitOfWork.PharmacyDeliveryRepresentativeRepository.Update(pharmacyDeliveryRepresentative);

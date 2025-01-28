@@ -9,7 +9,7 @@ public class MedicineVM
     public int Id { get; set; }
     [Required]
     public string Name { get; set; }
-    public int Status { get; set;}
+    public string Status { get; set;}
     public string Description { get; set; } = null!;
     [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative")]
     [Required]
@@ -28,9 +28,8 @@ public class MedicineVM
     [Required(ErrorMessage = "Please select a manufactory.")]
     public int MedicineManufactoryId { get; set; }
     public MedicineManufactoryVM? MedicineManufactory { get; set; }
-
     public MedicineVM()
     {
-        Status = 1;
+        Status = "Box";
     }
 }

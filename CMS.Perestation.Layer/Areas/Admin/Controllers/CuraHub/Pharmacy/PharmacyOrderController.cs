@@ -24,9 +24,9 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [Route("Index")]
         public IActionResult Index()
         {
-            var pharmacyOrders = _unitOfWork.PharmacyOrderRepository.Retrive().ToList();
-            var pharmacyOrderVMs = _mapper.Map<List<PharmacyOrderVM>>(pharmacyOrders);
-            return View(pharmacyOrderVMs);
+            var pharmacyOrders = _unitOfWork.PharmacyOrderRepository.Retrive(includeProps: [e => e.PharmacyCustomer, e => e.PharmacyDeliveryRepresentative]).ToList();
+            var pharmacyOrderVM = _mapper.Map<List<PharmacyOrderVM>>(pharmacyOrders);
+            return View(pharmacyOrderVM);
         }
         [HttpGet]
         [Route("Create")]
@@ -42,6 +42,8 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [ValidateAntiForgeryToken]
         public IActionResult Create(PharmacyOrderVM pharmacyOrderVM)
         {
+            ModelState.Remove("ShipmentStatus");
+            ModelState.Remove("PharmacyCustomer");
             if (ModelState.IsValid)
             {
                 var pharmacyOrder = _mapper.Map<PharmacyOrder>(pharmacyOrderVM);
@@ -49,7 +51,6 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
                 _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
-
             return View(pharmacyOrderVM);
         }
 
@@ -57,6 +58,8 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [Route("Edit")]
         public IActionResult Edit(int id)
         {
+            ViewData["PharmacyCustomer"] = _unitOfWork.PharmacyCustomerRepository.Retrive().ToList();
+            ViewData["PharmacyDelivery"] = _unitOfWork.PharmacyDeliveryRepresentativeRepository.Retrive().ToList();
             var pharmacyOrder = _unitOfWork.PharmacyOrderRepository.RetriveItem(o => o.Id == id);
             if (pharmacyOrder == null) return NotFound();
 
@@ -69,6 +72,8 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [ValidateAntiForgeryToken]
         public IActionResult Edit(PharmacyOrderVM pharmacyOrderVM)
         {
+            ModelState.Remove("ShipmentStatus");
+            ModelState.Remove("PharmacyCustomer");
             if (ModelState.IsValid)
             {
                 var pharmacyOrder = _mapper.Map<PharmacyOrder>(pharmacyOrderVM);
@@ -76,14 +81,13 @@ namespace CMS.Presentation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
                 _unitOfWork.Commit();
                 return RedirectToAction(nameof(Index));
             }
-
             return View(pharmacyOrderVM);
         }
         [HttpGet]
         [Route("Details")]
         public IActionResult Details(int id)
         {
-            var pharmacyOrder = _unitOfWork.PharmacyOrderRepository.RetriveItem(o => o.Id == id);
+            var pharmacyOrder = _unitOfWork.PharmacyOrderRepository.RetriveItem(o => o.Id == id, [e => e.PharmacyCustomer, e => e.PharmacyDeliveryRepresentative]);
             if (pharmacyOrder == null) return NotFound();
 
             var pharmacyOrderVM = _mapper.Map<PharmacyOrderVM>(pharmacyOrder);

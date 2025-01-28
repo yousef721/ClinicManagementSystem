@@ -101,6 +101,8 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             ModelState.Remove("ProfilePicture");
             ModelState.Remove("PersonalNationalIDCard");
             ModelState.Remove("BloodType");
+            ModelState.Remove("FileProfile");
+            ModelState.Remove("FileNationalIDCard");
             var oldPharmacistPhoto = _unitOfWork.PharmacistRepository.RetriveItem(e => e.Id == pharmacistVM.Id, trancked: false);
             if (ModelState.IsValid)
             {
