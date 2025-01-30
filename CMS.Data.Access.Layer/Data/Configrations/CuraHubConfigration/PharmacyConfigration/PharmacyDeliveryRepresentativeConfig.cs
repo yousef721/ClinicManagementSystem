@@ -55,7 +55,7 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.PharmacyC
                 .HasMaxLength(10)
                 .IsUnicode(true);
             builder.Property(e => e.BloodType)
-                .IsRequired(false)
+                .IsRequired()
                 .HasMaxLength(5)
                 .IsUnicode(true);
 

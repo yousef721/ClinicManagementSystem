@@ -21,7 +21,6 @@ namespace CMS.Models.CuraHub.IdentitySection.IdentitySectionVM
         //[RegularExpression("/^[a-zA-Z]{3,50}$/", ErrorMessage = "Last Name must be only alphabet letters")]
         public string LastName { get; set; } = null!;
         
-        public string? ProfilePicture { get; set; }
         [DataType(DataType.EmailAddress , ErrorMessage = "This is not email")]
         [Required(ErrorMessage = "Email is Required")]
         public string Email { get; set; } = null!;
@@ -33,6 +32,8 @@ namespace CMS.Models.CuraHub.IdentitySection.IdentitySectionVM
         [DataType(DataType.Password)]
         [Compare(nameof(Password),ErrorMessage = "'Password' and 'ConfirmPassword' do not match.\r\n")]
         public string ConfirmPassword { get; set; } = null!;
+
+        public string ProfilePicture { get; set; } = null!;
 
     }
 }

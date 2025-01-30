@@ -2,6 +2,7 @@
 using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.ClinicSection;
 using CMS.Models.CuraHub.ClinicSection.ClinicSectionVM;
+using CMS.Models.CuraHub.ClinicSection.ClinicSectionVM.ScheduleVM;
 using CMS.Models.CuraHub.IdentitySection;
 using CMS.Models.CuraHub.IdentitySection.IdentitySectionVM;
 using CMS.Models.CuraHub.QuestionAndAnswerSection;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Mono.TextTemplating;
+using System.Data;
 using System.IO;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -93,7 +95,7 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
 
 
 
-
+            TempData["DoctorIndexTotalCount"] = doctors.Count();
             if (PageNumber < 1) PageNumber = 1;
             doctors = doctors.Skip((PageNumber - 1) * 5).Take(5);
 
@@ -133,7 +135,7 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
         }
         [HttpGet]
         [Route("CreateEdit")]
-
+        //upins
         public IActionResult CreateEdit(int DoctorId = 0)
         {
             var doctor = _unitOfWork.DoctorRepository.RetriveItem(filter : e=>e.Id == DoctorId);
@@ -192,12 +194,10 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
             {
                 return RedirectToAction(actionName:nameof(Create),controllerName :nameof(Doctor),routeValues: doctorCreateVM);
             }
-            else
-            {
-                return RedirectToAction(actionName: nameof(Edit), controllerName: nameof(Doctor), routeValues: doctorCreateVM);
-            }
+            
+            return RedirectToAction(actionName: nameof(Edit), controllerName: nameof(Doctor), routeValues: doctorCreateVM);
+            
 
-            return NotFound();
         }
         [Route("Create")]
         public IActionResult Create(DoctorCreateEditVM doctorCreateVM)
@@ -229,7 +229,26 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
 
                 _unitOfWork.DoctorRepository.Create(doctor);
                 _unitOfWork.Commit();
-                return RedirectToAction(nameof(Index));
+                var savedDoctor = _unitOfWork.DoctorRepository.RetriveItem(filter: e => e.PersonalNationalIDNumber == doctor.PersonalNationalIDNumber);
+
+
+
+                CreateDoctorScheduleVM createDoctorScheduleVM = new CreateDoctorScheduleVM();
+                if (savedDoctor != null)
+                {
+                    // Change Role to Doctor
+                    var user = _userManager.FindByIdAsync(savedDoctor.ApplicationUserId).GetAwaiter().GetResult();
+                    if (user != null)
+                    {
+                        _userManager.RemoveFromRolesAsync(user, _userManager.GetRolesAsync(user).GetAwaiter().GetResult()).GetAwaiter().GetResult();
+                        _userManager.AddToRoleAsync(user,Role.DoctorRole).GetAwaiter().GetResult();
+                    }
+
+                    createDoctorScheduleVM.DoctorId = savedDoctor.Id;
+                    TempData["DoctorId"] = savedDoctor.Id;
+
+                }
+                return RedirectToAction("CreateDoctorSchedule" ,controllerName: "Schedule" , createDoctorScheduleVM);
 
             }
             return RedirectToAction("CreateEdit", routeValues: doctorCreateVM);
@@ -400,6 +419,17 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
                     FileOperation.DeleteFile(doctor.MedicalRegistration, "MedicalRegistration");
 
                 }
+
+
+
+                // Change Role to Customer
+                var user = _userManager.FindByIdAsync(doctor.ApplicationUserId).GetAwaiter().GetResult();
+                if (user != null)
+                {
+                    _userManager.RemoveFromRolesAsync(user, _userManager.GetRolesAsync(user).GetAwaiter().GetResult()).GetAwaiter().GetResult();
+                    _userManager.AddToRoleAsync(user, Role.DoctorRole).GetAwaiter().GetResult();
+                }
+
 
                 this._unitOfWork.DoctorRepository.Delete(doctor);
                 this._unitOfWork.Commit();

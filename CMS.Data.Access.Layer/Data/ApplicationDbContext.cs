@@ -1,5 +1,6 @@
 ﻿using CMS.Models;
 using CMS.Models.CuraHub.ClinicSection;
+using CMS.Models.CuraHub.ClinicSection.ClinicSectionVM.ClinicReceptionistVM;
 using CMS.Models.CuraHub.IdentitySection;
 using CMS.Models.CuraHub.MedicalAnalysisLabSection;
 using CMS.Models.CuraHub.PersonalDetails;
@@ -26,12 +27,12 @@ namespace CMS.Data.Access.Layer.Data
         /// Clinic Tables
         /// </summary>
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<PatientHistory> Histories { get; set; }
+        public DbSet<PatientHistory> PatientHistories { get; set; }
         public DbSet<PatientAppointment> PatientAppointments { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Qualification> Qualifications { get; set; }
-        public DbSet<Receptionist> Receptionists { get; set; }
-        public DbSet<RequestReceptionist> RequestReceptionists { get; set; }
+        public DbSet<ClinicReceptionist> ClinicReceptionists { get; set; }
+        public DbSet<RequestClinicReceptionist> RequestClinicReceptionists { get; set; }
         public DbSet<RequestDoctor> RequestDoctors { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
 
@@ -69,6 +70,7 @@ namespace CMS.Data.Access.Layer.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
            : base(options)
         {
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

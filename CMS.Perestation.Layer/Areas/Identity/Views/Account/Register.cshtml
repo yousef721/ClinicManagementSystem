@@ -4,7 +4,12 @@
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_authenticationLayout.cshtml";
 }
-
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 <div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card mb-6" style="max-width: 70%;">
@@ -13,7 +18,7 @@
 
         <form action="Register" enctype="multipart/form-data" method="post">
             <div class="row g-0">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6">
@@ -53,15 +58,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <img id="preview" src="~/Files/Images/profiles/Profile.png" alt="Image Preview" style="max-width: 250px; max-height: 250px;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="ProfilePicture" class="form-label text-start d-block">Profile Picture</label>
-                        <input type="file" accept="image/*" class="form-control" name="ProfilePicture" id="ProfilePicture" placeholder="Profile Picture" onchange="previewImage(event)">
-                    </div>
-                </div>
             </div>
             <div class="row g-0">
                 <div class="col-md-12">
@@ -77,17 +73,6 @@
     </div>
 </div>
 
-<script>
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function () {
-            var output = document.getElementById('preview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
 
 @section Scripts
                         {

@@ -11,27 +11,27 @@
         <form asp-action="Create" method="post" class="needs-validation" enctype="multipart/form-data">
             <div class="d-flex flex-row mb-3">
                 <div class="form-group d-flex  w-50">
-                    <input asp-for="FirstName" class="form-control me-4" type="text" placeholder="First Name"/>
+                    <input asp-for="@Model.FirstName" class="form-control me-4" type="text" placeholder="First Name"/>
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex w-50">
-                    <input asp-for="LastName" class="form-control" type="text" placeholder="Last Name"/>
+                    <input asp-for="@Model.LastName" class="form-control" type="text" placeholder="Last Name"/>
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row mb-3">
                 <div class="form-group d-flex w-50">
-                    <input asp-for="Email" class="form-control me-4" type="email" placeholder="Email"/>
+                    <input asp-for="@Model.Email" class="form-control me-4" type="email" placeholder="Email"/>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex w-50">
-                    <input asp-for="Phone" class="form-control" type="tel" placeholder="Phone Number"/>
+                    <input asp-for="@Model.Phone" class="form-control" type="tel" placeholder="Phone Number"/>
                     <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row mb-3">
                 <div class="form-group d-flex w-50">
-                    <select class="form-control me-4" asp-for="State">
+                    <select class="form-control me-4" asp-for="@Model.State">
                         <option selected>Select State</option>
                         <option value="Alexandria">Alexandria</option>
                         <option value="Aswan">Aswan</option>
@@ -64,7 +64,7 @@
                     <span asp-validation-for="State" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex w-50">
-                    <select class="form-control" asp-for="City">
+                    <select class="form-control" asp-for="@Model.City">
                         <option selected>Select City</option>
                         <option value="ObourCity">ObourCity</option>
                         <option value="NaserCity">NaserCity</option>
@@ -78,48 +78,48 @@
             </div>
             <div class="d-flex flex-row mb-3">
                 <div class="form-group d-flex w-50">
-                    <input asp-for="Region" class="form-control me-4" type="text" placeholder="Region"/>
+                    <input asp-for="@Model.Region" class="form-control me-4" type="text" placeholder="Region"/>
                     <span asp-validation-for="Region" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex w-50">
-                    <input asp-for="Street" class="form-control" type="text" placeholder="Street"/>
+                    <input asp-for="@Model.Street" class="form-control" type="text" placeholder="Street"/>
                     <span asp-validation-for="Street" class="text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row mb-3">
                 <div class="form-group d-flex align-items-center w-25">
-                    <label asp-for="Gender" class="control-label me-5">Gender</label>
-                    <input asp-for="Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Male" checked/>
-                    <label class="form-check-label me-2" asp-for="Gender">
+                    <label asp-for="@Model.Gender" class="control-label me-5">Gender</label>
+                    <input asp-for="@Model.Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Male" checked/>
+                    <label class="form-check-label me-2" asp-for="@Model.Gender">
                         Male
                     </label>
-                    <input asp-for="Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Female"/>
-                    <label class="form-check-label me-2" asp-for="Gender">
+                    <input asp-for="@Model.Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Female"/>
+                    <label class="form-check-label me-2" asp-for="@Model.Gender">
                         Female
                     </label>
                     <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex align-items-center w-75">
-                    <label asp-for="DateOfBirth" class="control-label w-25"></label>
-                    <input asp-for="DateOfBirth" class="form-control w-100" type="date"/>
+                    <label asp-for="@Model.DateOfBirth" class="control-label w-25"></label>
+                    <input asp-for="@Model.DateOfBirth" class="form-control w-100" type="date"/>
                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row mb-3">
                 <div class="form-group d-flex w-25">
-                    <input asp-for="PersonalNationalIDNumber" class="form-control" type="text" placeholder="Personal National ID Number"/>
+                    <input asp-for="@Model.PersonalNationalIDNumber" class="form-control" type="text" placeholder="Personal National ID Number"/>
                     <span asp-validation-for="PersonalNationalIDNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group d-flex align-items-center w-75">
-                    <label asp-for="FileProfile" class="control-label w-25">Photo CardID</label>
-                    <input asp-for="FileNationalIDCard" class="form-control w-100" type="file" placeholder="Personal National ID Card"/>
+                    <label asp-for="@Model.FileProfile" class="control-label w-25">Photo CardID</label>
+                    <input asp-for="@Model.FileNationalIDCard" class="form-control w-100" type="file" placeholder="Personal National ID Card"/>
                     <span asp-validation-for="FileNationalIDCard" class="text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row">
                 <div class="form-group d-flex align-items-center w-100">
-                    <label asp-for="FileProfile" class="control-label me-3">Photo</label>
-                    <input asp-for="FileProfile" class="form-control" type="file"/>
+                    <label asp-for="@Model.FileProfile" class="control-label me-3">Photo</label>
+                    <input asp-for="@Model.FileProfile" class="form-control" type="file"/>
                     <span asp-validation-for="FileProfile" class="text-danger"></span>
                 </div>
             </div>

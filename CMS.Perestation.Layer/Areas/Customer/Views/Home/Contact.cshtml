@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_authenticationLayout.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="container p-2 bg-white bg-opacity-75 text-dark">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Contact Us</h2>
+            <p>Have questions or concerns? Feel free to reach out to us.</p>
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Your Message</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h2>Contact Information</h2>
+            <p><strong>Address:</strong> El-dokki - 5 mosadak st , third floor</p>
+            <p><strong>Phone:</strong> +201068268354</p>
+            <p><strong>Email:</strong> info@CuraHub.com</p>
+            <p><strong>Working Hours:</strong> 09:00 AM - 10:00:PM</p>
+            <ul class="list-unstyled social-icons">
+                <li><a href="https://www.facebook.com/your-page"><i class="bi bi-facebook"></i> Facebook</a></li>
+                <li><a href="https://www.instagram.com/your-page"><i class="bi bi-instagram"></i> Instagram</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

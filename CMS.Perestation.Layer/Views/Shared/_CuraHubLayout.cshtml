@@ -7,8 +7,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CustomerFilter.css" asp-append-version="true" />
+
     @* <link rel="stylesheet" href="~/CMS.Presentation.layer.styles.css" asp-append-version="true" /> *@
     <style>
         body {
@@ -62,13 +69,152 @@
        <partial name="_NavbarPartial" />
 
     </header>
-    <div class="hero-section">
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
+    
+    
+    <div class="row">
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-2 bg-dark text-white min-vh-100">
+
+                <br />
+
+                <br />
+
+                <br />
+
+                <div class="">
+
+                    <h3 class="text-center mt-3">Dashboard</h3>
+
+                    <ul class="nav flex-column">
+
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="/Customer/Home/Index"><i class="bi bi-house-fill"></i> Home</a>
+
+                            <hr />
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <!-- إضافة سهم وقائمة منسدلة -->
+
+                            <h6 class="nav-link text-white dropdown-header" data-bs-toggle="collapse" data-bs-target="#identityCollapse" id="identityHeader">
+
+                                Identity <i class="fas fa-chevron-down float-end" id="identityArrow"></i>
+
+                            </h6>
+
+                            <div class="collapse" id="identityCollapse">
+
+                                <a class="nav-link" href="/Admin/CuraHub/Identity/User/Index"><i class="bi bi-person-circle"></i> Users</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Identity/Role/Index"><i class="bi bi-border-width"></i> Roles</a>
+
+                            </div>
+
+                            <hr />
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <!-- إضافة سهم وقائمة منسدلة -->
+
+                            <h6 class="nav-link text-white dropdown-header" data-bs-toggle="collapse" data-bs-target="#clinicCollapse" id="clinicHeader">
+
+                                Clinic <i class="fas fa-chevron-down float-end" id="clinicArrow"></i>
+
+                            </h6>
+
+                            <div class="collapse" id="clinicCollapse">
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/Doctor/Index"><i class="bi bi-heart-pulse"></i> Doctors</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/Patient/Index"><i class="fas fa-user-injured fa-1x"></i> Patients</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/ClinicReceptionist/Index"><i class="bi bi-receipt-cutoff"></i> Receptionists</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/Specialization/Index"><i class="fas fa-user-md fa-1x"></i> Specializations</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/Qualification/Index"><i class="bi bi-layers-fill"></i> Qualifications</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/RequestDoctor/Index"><i class="bi bi-heart-pulse-fill"></i> Request Doctors</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Clinic/RequestClinicReceptionist/Index"><i class="bi bi-reception-2"></i> Request Receptionists</a>
+
+                            </div>
+
+                            <hr />
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <!-- إضافة سهم وقائمة منسدلة -->
+
+                            <h6 class="nav-link text-white dropdown-header" data-bs-toggle="collapse" data-bs-target="#pharmacyCollapse" id="pharmacyHeader">
+
+                                Pharmacy <i class="fas fa-chevron-down float-end" id="pharmacyArrow"></i>
+
+                            </h6>
+
+                            <div class="collapse" id="pharmacyCollapse">
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/Medicine/Index"><i class="fas fa-prescription-bottle fa-1x"></i>Medicines</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/PharmacyCategory/Index">Categories</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/MedicineManufactory/Index">Manufactories</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/Pharmacist/Index">Pharmacists</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/PharmacyOrder/Index">Orders</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/PharmacyDeliveryRepresentative/Index">Delivery Representatives</a>
+
+                                <a class="nav-link" href="/Admin/CuraHub/Pharmacy/PharmacyCustomer/Index">Pharmacy Customers</a>
+
+                            </div>
+
+                            <hr />
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+            <div class="col-md-10">
+                <div class="hero-section">
+                    <div class="container">
+                        <main role="main" class="pb-3">
+                            @RenderBody()
+                        </main>
+                    </div>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="hero-section">
+                    <div class="container">
+                        <main role="main" class="pb-3">
+                            @RenderBody()
+                        </main>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+      
     </div>
+    
     <!-- Features Section -->
     <section class="features-section">
         <div class="container">
@@ -131,7 +277,41 @@
         </footer>
         <!-- Footer -->
     </section>
+    <script>
+                document.addEventListener("DOMContentLoaded", function () {
+            const dropdownHeaders = document.querySelectorAll(".dropdown-header");
 
+            dropdownHeaders.forEach(header => {
+                const collapseTarget = document.querySelector(header.dataset.bsTarget);
+                const arrowIcon = header.querySelector("i");
+
+                // التحقق من وجود العناصر
+                if (header && collapseTarget && arrowIcon) {
+                    const collapse = new bootstrap.Collapse(collapseTarget, { toggle: false });
+
+                    header.addEventListener("click", function () {
+                        collapse.toggle();
+                        this.setAttribute("aria-expanded", collapseTarget.classList.contains("show")); // تحديث aria-expanded
+                    });
+
+                    collapseTarget.addEventListener("show.bs.collapse", function () {
+                        arrowIcon.classList.remove("fa-chevron-down");
+                        arrowIcon.classList.add("fa-chevron-up");
+                    });
+
+                    collapseTarget.addEventListener("hide.bs.collapse", function () {
+                        arrowIcon.classList.remove("fa-chevron-up");
+                        arrowIcon.classList.add("fa-chevron-down");
+                    });
+
+                    // إضافة aria-controls
+                    header.setAttribute("aria-controls", collapseTarget.id);
+                } 
+            });
+        });
+
+
+    </script> 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

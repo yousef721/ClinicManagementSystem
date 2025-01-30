@@ -5,6 +5,7 @@ using System.Diagnostics;
 namespace CMS.Perestation.Layer.Areas.Customer.Controllers
 {
     [Area(nameof(Customer))]
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,11 +23,26 @@ namespace CMS.Perestation.Layer.Areas.Customer.Controllers
         {
             return View();
         }
+
+        public IActionResult MemberRequest()
+        {
+            return View();
+        }
+
+
         public IActionResult Service()
         {
             return View();
         }
         public IActionResult Auth()
+        {
+            return View();
+        }
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+        public IActionResult Contact()
         {
             return View();
         }
@@ -54,7 +70,11 @@ namespace CMS.Perestation.Layer.Areas.Customer.Controllers
         {
             return View();
         }
-
+        // /Customer/Home/NotFoundPage?message=no
+        public IActionResult NotFoundPage(string? Message)
+        {
+            return View(new { Message });
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

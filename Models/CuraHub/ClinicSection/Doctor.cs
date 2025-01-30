@@ -15,6 +15,8 @@ namespace CMS.Models.CuraHub.ClinicSection
         public double ConsultationDuration { get; set; }
         public double ConsultationFees { get; set; }
         public double Rate { get; set; }
+        public int userRatingCount { get; set; }
+
         public string Title { get; set; } = null!;
 
         public string MedicalLicense { get; set; } = null!;

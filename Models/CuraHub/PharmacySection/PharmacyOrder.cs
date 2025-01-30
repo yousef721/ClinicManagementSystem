@@ -15,6 +15,9 @@ namespace CMS.Models.CuraHub.PharmacySection
         public double TotalPrice { get; set; }
         public ShipmentStatus ShipmentStatus { get; set; }
 
+        public DateTime DateTime { get; set; }
+        public int OrderCount   { get; set; }
+
         public int PharmacyCustomerId { get; set; }
         public PharmacyCustomer PharmacyCustomer { get; set; } = null!;
         public int PharmacyDeliveryRepresentativeId { get; set; }

@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -8,14 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../CMS.Data.Access.Layer/CMS.Data.Access.Layer.csproj" />
-    <ProjectReference Include="../Models/CMS.Models.csproj" />
+    <ProjectReference Include="..\CMS.Data.Access.Layer\CMS.Data.Access.Layer.csproj" />
     <ProjectReference Include="..\CMS.Utitlities\CMS.Utitlities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas/Admin/Views/PharmacyCustomer/" />
-    <Folder Include="Areas/Admin/Views/PharmacyDeliveryRepresentative/" />
     <Folder Include="Areas\Admin\Controllers\CuraHub\MedicalAnalysis\" />
     <Folder Include="Areas\Admin\Controllers\CuraHub\Q&amp;A\" />
     <Folder Include="Areas\Admin\Controllers\CuraHub\Pharmacy\" />

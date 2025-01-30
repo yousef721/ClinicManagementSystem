@@ -57,7 +57,7 @@ namespace CMS.Models.CuraHub.ClinicSection.ClinicSectionVM
         [Required]
 
         public string ProfilePicture { get; set; } = null!;
-        public IFormFile ProfilePictureFile { get; set; }
+        public IFormFile? ProfilePictureFile { get; set; }
 
         [Required]
 
@@ -113,11 +113,11 @@ namespace CMS.Models.CuraHub.ClinicSection.ClinicSectionVM
 
         /// <summary>
 
-        public IFormFile PersonalNationalIDCardFile  { get; set; }
-        public IFormFile MedicalDegreeFile             { get; set; }
-        public IFormFile MedicalLicenseFile            { get; set; } 
-        public IFormFile MedicalRegistrationFile       { get; set; } 
-        public IFormFile MedicalIdentificationCardFile { get; set; }
+        public IFormFile? PersonalNationalIDCardFile    { get; set; }
+        public IFormFile? MedicalDegreeFile             { get; set; }
+        public IFormFile? MedicalLicenseFile            { get; set; } 
+        public IFormFile? MedicalRegistrationFile       { get; set; } 
+        public IFormFile? MedicalIdentificationCardFile { get; set; }
 
         /// </summary>
 
@@ -170,6 +170,13 @@ namespace CMS.Models.CuraHub.ClinicSection.ClinicSectionVM
             this.MedicalIdentificationCard = "MedicalIdentificationCard.jpg";
             this.SpecializationId = 1;
             this.CrudDoctorOption = CrudOption.Creating;
+
+            this.PersonalNationalIDCardFile    =null;
+            this.MedicalDegreeFile             =null;
+            this.MedicalLicenseFile            =null;
+            this.MedicalRegistrationFile       =null;
+            this.MedicalIdentificationCardFile = null;
+            this.ProfilePictureFile = null;
         }
 
 

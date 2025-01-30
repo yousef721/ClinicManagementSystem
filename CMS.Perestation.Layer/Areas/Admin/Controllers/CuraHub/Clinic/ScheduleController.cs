@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CMS.Data.Access.Layer.Repository.IRepository;
+using CMS.Models.CuraHub.ClinicSection;
 using CMS.Models.CuraHub.ClinicSection.ClinicSectionVM;
+using CMS.Models.CuraHub.ClinicSection.ClinicSectionVM.ScheduleVM;
 using CMS.Models.CuraHub.IdentitySection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +46,7 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
 
 
         [Route("LockAvailable")]
-        public IActionResult LockAvailable(int ScheduleId)
+        public IActionResult LockAvailable(int ScheduleId , int DoctorId)
         {
             var schedule = this._unitOfWork.ScheduleRepository.RetriveItem(filter: e => e.Id == ScheduleId);
             if (schedule != null)
@@ -53,10 +55,12 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
                 this._unitOfWork.ScheduleRepository.Update(schedule);
                 this._unitOfWork.Commit();
             }
-            return RedirectToAction("Index", "Schedule", new { area = "Admin" });
+            TempData["DoctorId"] = DoctorId;
+
+            return RedirectToAction("ShowDoctorSchedule", routeValues: DoctorId);
         }
         [Route("UnLockAvailable")]
-        public IActionResult UnLockAvailable(int ScheduleId)
+        public IActionResult UnLockAvailable(int ScheduleId , int DoctorId)
         {
             var schedule = this._unitOfWork.ScheduleRepository.RetriveItem(filter: e => e.Id == ScheduleId);
             if (schedule != null)
@@ -65,8 +69,77 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Clinic
                 this._unitOfWork.ScheduleRepository.Update(schedule);
                 this._unitOfWork.Commit();
             }
-            return RedirectToAction("Index", "Schedule", new { area = "Admin" });
+            TempData["DoctorId"] = DoctorId;
+            return RedirectToAction("ShowDoctorSchedule" , routeValues: DoctorId);
         }
+
+        [Route("ShowDoctorSchedule")]
+
+        public IActionResult ShowDoctorSchedule(int DoctorId)
+        {
+            if (TempData["DoctorId"] != null)
+            {
+                DoctorId = Convert.ToInt32( TempData["DoctorId"]);
+            }
+            var doctor = this._unitOfWork.DoctorRepository.RetriveItem(filter: e => e.Id == DoctorId, trancked: false);
+            if (doctor != null)
+            {
+                var Schedules = this._unitOfWork.ScheduleRepository.Retrive(filter: e => e.DoctorId == DoctorId, includeProps: [e =>e.Doctor]);
+                return View(Schedules.ToList());
+            }
+            return RedirectToAction(actionName: "NotFoundPage", controllerName: "Home", new {area = "Customer"});
+        }
+        [HttpGet]
+        [Route("CreateDoctorSchedule")]
+        public IActionResult CreateDoctorSchedule(CreateDoctorScheduleVM createDoctorScheduleVM)
+        {
+            return View(createDoctorScheduleVM);
+        }
+
+        [HttpPost]
+        [Route("CreateDoctorSchedule")]
+        public IActionResult CreateDoctorSchedule(int DoctorId)
+        {
+            var doctor = this._unitOfWork.DoctorRepository.RetriveItem(filter:e =>e.Id == DoctorId,  trancked:false ) as Doctor;
+            if (doctor != null)
+            {
+                var numOfConstantant = (doctor.EndWork - doctor.StartWork).TotalMinutes/(doctor.ConsultationDuration);
+                
+                for(var day = DayOfWeek.Sunday; day <= DayOfWeek.Saturday; day++)
+                {
+                    var appointment = doctor.StartWork;
+                    Schedule schedule = new Schedule
+                    {
+                        Appointment = appointment,
+                        Available = true,
+                        DoctorId = DoctorId,
+                        Day = day
+                    };
+
+                    _unitOfWork.ScheduleRepository.Create(schedule);
+
+                    for (int i = 1; i < numOfConstantant; i++)
+                    {
+                        appointment = appointment.AddMinutes(doctor.ConsultationDuration);
+
+                        Schedule schedule1 = new Schedule
+                        {
+                            Appointment = appointment,
+                            Available = true,
+                            DoctorId = DoctorId,
+                            Day = day
+                        };
+                        _unitOfWork.ScheduleRepository.Create(schedule1);
+                    }
+                }
+                _unitOfWork.Commit();
+
+            }
+
+
+            return RedirectToAction("Index", "Doctor");
+        }
+
 
 
     }

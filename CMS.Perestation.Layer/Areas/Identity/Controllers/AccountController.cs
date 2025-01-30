@@ -6,8 +6,7 @@ using CMS.Utitlities.Helper;
 using CMS.Utitlities.StaticData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using CMS.Utitlities.Email;
 
 namespace CMS.Perestation.Layer.Areas.Identity.Controllers
 {
@@ -19,19 +18,20 @@ namespace CMS.Perestation.Layer.Areas.Identity.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
         //private readonly IUnitOfWork _unitOfWork;
 
         private readonly IMapper _mapper;
 
 
-        public AccountController( UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IEmailSender emailSender)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._roleManager = roleManager;
-            this._mapper = mapper; 
-            
+            this._mapper = mapper;
+            this._emailSender = emailSender;
         }
 
 
@@ -43,30 +43,24 @@ namespace CMS.Perestation.Layer.Areas.Identity.Controllers
         }
         [HttpPost]
         [Route("Register")]
-        public async Task< IActionResult> Register(RegisterVM registerVM , IFormFile ProfilePicture)
+        public async Task<IActionResult> Register(RegisterVM registerVM)
         {
             ModelState.Remove("ProfilePicture");
             if (ModelState.IsValid)
             {
-                if (ProfilePicture != null && ProfilePicture.Length > 0)
-                {
-                    registerVM.ProfilePicture = FileOperation.UploadFile(ProfilePicture, "Images\\Profiles");
-                }
-                else
-                {
-                    registerVM.ProfilePicture = "Profile.png";
-                }
+
 
                 ApplicationUser applicationUser = _mapper.Map<ApplicationUser>(registerVM);
                 applicationUser.UserName = registerVM.Email.Split('@')[0];
+                applicationUser.ProfilePicture = "Profile.png";
 
-                var result = _userManager.CreateAsync(applicationUser,registerVM.Password).GetAwaiter().GetResult();
+                var result = _userManager.CreateAsync(applicationUser, registerVM.Password).GetAwaiter().GetResult();
 
                 if (result.Succeeded)
                 {
-                    await   _userManager.AddToRoleAsync(applicationUser, Role.CustomerRole);
+                    await _userManager.AddToRoleAsync(applicationUser, Role.CustomerRole);
                     await _signInManager.SignInAsync(applicationUser, false);
-                    return RedirectToAction("Index", "Home" , new {area = "Home"});
+                    return RedirectToAction("Index", "Home", new { area = "Customer" });
                 }
                 else
                 {
@@ -97,7 +91,7 @@ namespace CMS.Perestation.Layer.Areas.Identity.Controllers
                     if (flag)
                     {
                         await _signInManager.PasswordSignInAsync(user, loginVM.Password, isPersistent: loginVM.RemeberMe, false);
-                        return RedirectToAction("Index", "Home", new { area = "Home" });
+                        return RedirectToAction("Index", "Home", new { area = "Customer" });
 
 
                     }
@@ -119,7 +113,7 @@ namespace CMS.Perestation.Layer.Areas.Identity.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home", new { area = "Home" });
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
         [HttpGet]
         [Route("Profile")]
@@ -160,13 +154,130 @@ namespace CMS.Perestation.Layer.Areas.Identity.Controllers
                 oldProfile.ProfilePicture = profileVM.ProfilePicture;
 
                 await _userManager.UpdateAsync(oldProfile);
-                
+
             }
             else
             {
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
             return View(profileVM);
+        }
+
+        [HttpGet]
+        [Route("ChangePassword")]
+
+        public IActionResult ChangePassword()
+        {
+            return View(new ChangePasswordVM());
+        }
+        [HttpPost]
+        [Route("ChangePassword")]
+
+        public IActionResult ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _userManager.GetUserAsync(User).Result;
+                if (user != null)
+                {
+                    var result = _userManager.ChangePasswordAsync(user, changePasswordVM.OldPassword, changePasswordVM.NewPassword).GetAwaiter().GetResult();
+
+                    return RedirectToAction("Profile", "Account", new { area = "Identity" });
+
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Account", new { area = "Identity" });
+
+                }
+            }
+            return View(changePasswordVM);
+        }
+        [HttpGet]
+        [Route("ForgetPassword")]
+        public IActionResult ForgetPassword()
+        {
+            return View(new ForgetPasswordVM());
+        }
+
+        [HttpPost]
+        [Route("ForgetPassword")]
+
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordVM forgetPasswordVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(forgetPasswordVM.Email);
+                if (user != null)
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var ResetPasswordLink = Url.Action("ResetPassword", "Account", new { email = user.Email, Token = token }, Request.Scheme);
+                    await _emailSender.SendEmailAsync(
+                        email: forgetPasswordVM.Email,
+                        subject: "Reset Password",
+                          message: ResetPasswordLink
+                        );
+                    return RedirectToAction(nameof(CkeckYourMail));
+
+
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Email is not Exist");
+                }
+            }
+
+            return View(forgetPasswordVM);
+        }
+        [Route("CkeckYourMail")]
+
+        public IActionResult CkeckYourMail()
+        {
+            return View();
+        }
+        [HttpGet]
+        [Route("ResetPassword")]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            ResetPasswordVM resetPasswordVM = new ResetPasswordVM()
+            {
+                Email = email,
+                Token = token
+            };
+
+            return View(resetPasswordVM);
+        }
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM resetPasswordVM)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var user = await _userManager.FindByEmailAsync(resetPasswordVM.Email);
+                if (user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, resetPasswordVM.Token, resetPasswordVM.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Login));
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+
+                        }
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "email is not exists ");
+                }
+            }
+            return View(resetPasswordVM);
+
         }
     }
 }

@@ -22,5 +22,7 @@ namespace CMS.Models.CuraHub.ClinicSection.ClinicSectionVM
         public int SpecializationId { get; set; }
         public Specialization Specialization { get; set; } = null!;
 
+        public List<Schedule> Schedules { get; set; } = new List<Schedule>();
+
     }
 }

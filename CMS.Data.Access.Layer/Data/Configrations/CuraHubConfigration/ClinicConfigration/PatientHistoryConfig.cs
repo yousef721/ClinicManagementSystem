@@ -24,7 +24,7 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.ClinicCon
                 .WithMany(e => e.Histories)
                 .HasForeignKey(e => e.PatientId);
 
-            builder.ToTable(name: "Patients", schema: "Clinic");
+            builder.ToTable(name: "PatientHistories", schema: "Clinic");
 
 
         }

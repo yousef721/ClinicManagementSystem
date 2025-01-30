@@ -290,6 +290,9 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("userRatingCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SpecializationId");
@@ -304,6 +307,12 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("BloodType")
                         .HasMaxLength(4)
@@ -404,7 +413,7 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patient", "Clinic");
+                    b.ToTable("Patients", "Clinic");
                 });
 
             modelBuilder.Entity("CMS.Models.CuraHub.ClinicSection.PatientAppointment", b =>
@@ -449,7 +458,7 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Patients", "Clinic");
+                    b.ToTable("PatientHistories", "Clinic");
                 });
 
             modelBuilder.Entity("CMS.Models.CuraHub.ClinicSection.Qualification", b =>
@@ -1032,7 +1041,7 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateOnly>("DateOfBirth")
+                    b.Property<DateOnly>("DateOfbirth")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
@@ -1059,14 +1068,18 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PersonalNationalIDCard")
+                    b.Property<string>("MaritalStatus")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PersonalNationalIDCard")
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("PersonalNationalIDNumber")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
@@ -1076,10 +1089,6 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ProfilePicture")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Region")
                         .IsRequired()
@@ -1707,23 +1716,25 @@ namespace CMS.Data.Access.Layer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasMaxLength(10000)
+                        .IsRequired()
+                        .HasMaxLength(1000)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Img")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("MedicineManufactoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(50)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("PharmacyCategoryId")
                         .HasColumnType("int");
@@ -1731,12 +1742,11 @@ namespace CMS.Data.Access.Layer.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<double>("PurchasePrice")
+                        .HasColumnType("float");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1761,16 +1771,19 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Info")
+                        .IsRequired()
                         .HasMaxLength(1000)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Logo")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
@@ -1782,6 +1795,7 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
@@ -1812,6 +1826,9 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PharmacyOrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicineCount")
                         .HasColumnType("int");
 
                     b.HasKey("MedicineId", "PharmacyOrderId");
@@ -1975,17 +1992,11 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BloodType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -1999,33 +2010,17 @@ namespace CMS.Data.Access.Layer.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PersonalNationalIDCard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PersonalNationalIDNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("ProfilePicture")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Region")
                         .IsRequired()
@@ -2063,6 +2058,7 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BloodType")
+                        .IsRequired()
                         .HasMaxLength(5)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(5)");
@@ -2170,8 +2166,14 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<double>("Discount")
                         .HasColumnType("float");
+
+                    b.Property<int>("OrderCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("PharmacyCustomerId")
                         .HasColumnType("int");

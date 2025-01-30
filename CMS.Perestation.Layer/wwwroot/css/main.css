@@ -1,0 +1,18 @@
+﻿.options {
+    /* display: flex; */
+    gap: 10px;
+}
+
+.option {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .option:hover {
+        background-color: #f0f0f0;
+    }
+
+    .option.selected {
+        background-color: #747a77;
+        color: white;
+    }

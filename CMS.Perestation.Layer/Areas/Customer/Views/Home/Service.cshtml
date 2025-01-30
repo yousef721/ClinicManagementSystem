@@ -36,17 +36,18 @@
         <div class="row">
             <div class="col-10">
                 <div class="rounded-2 bg-white " )>
-                    <form>
+                    <form action="/Customer/CuraHub/Clinic/Doctor/Index">
                         <br />
 
                         <div class="row">
                             <div class="col-3 ms-2">
                                 <div class="mb-3">
                                     <input type="text" class="form-control" name="query" id="SearchInput" placeholder="Search By Doctor Name">
+                                    
                                 </div>
                             </div>
                             <div class="col-3">
-                                <select class="form-select" aria-label="Default select example">
+                                <select class="form-select" name="SpecializationId" aria-label="Default select example">
                                     <option selected>Select speciality</option>
                                     @foreach (var specialization in specializations)
                                     {
@@ -58,8 +59,8 @@
                             </div>
 
                             <div class="col-2">
-                                <select class="form-select" id="mySelect" aria-label="Default select example">
-                                    <option selected>Select State</option>
+                                <select class="form-select" id="mySelect" name="State" aria-label="Default select example">
+                                    <option value="@null" selected>Select State</option>
                                     <option value="Alexandria">Alexandria</option>
                                     <option value="Aswan">Aswan</option>
                                     <option value="Asyut">Asyut</option>
@@ -91,8 +92,8 @@
 
                             </div>
                             <div class="col-2">
-                                <select class="form-select" id="regionSelect" aria-label="Default select example">
-                                    <option selected>Select Region</option>
+                                <select class="form-select" name="City" id="regionSelect" aria-label="Default select example">
+                                    <option value="@null" selected>Select Region</option>
 
                                 </select>
 
@@ -247,8 +248,8 @@
 
         if (selectedState) {
           var availableCities = cities[selectedState];
-            regionSelect.append('<option selected>Select Region</option>');
-            regionSelect.append('<option >All Region</option>');
+            regionSelect.append('<option value="@null" selected>Select Region</option>');
+            regionSelect.append('<option value="@null" >All Region</option>');
           if (availableCities) {
             for (var i = 0; i < availableCities.length; i++) {
               regionSelect.append('<option value="' + availableCities[i] + '">' + availableCities[i] + '</option>');
