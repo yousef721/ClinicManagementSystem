@@ -1,0 +1,108 @@
+﻿@model List<CMS.Models.CuraHub.PharmacySection.PharmacyCategory>
+
+@{
+    ViewData["Title"] = "Pharmacy";
+    Layout = "~/Views/Shared/_PharmacyLayout.cshtml";
+}
+
+<img src="~/Files/Images/فلسطين.svg" class="rounded-circle " style="width: 50px;" />
+
+<h1>Pharmacy</h1>
+
+<div class="container">
+    <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
+        <input type="text" class="form-control" id="searchInput" placeholder="Search for medicines..." autocomplete="off">
+    </div>
+
+    @* Search Dropdown Results *@
+    <div id="searchResultsContainer"></div>
+
+    <h2 class="text-center font-weight-bold mt-4">Browse by Category</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <a class="text-decoration-none" href="/Customer/CuraHub/Pharmacy/Medicine/Index">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">All Medicine</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        @foreach (var category in Model)
+        {
+            <div class="col-md-3">
+                <a class="text-decoration-none" href="/Customer/CuraHub/Pharmacy/Medicine/Index?categoryId=@category.Id">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@category.Name</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .container {
+        margin-top: 20px;
+        position: relative;
+    }
+    .list-group-item {
+        cursor: pointer;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+    #searchResults {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        z-index: 1000;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+</style>
+
+<script>
+$(document).ready(function () {
+    const searchInput = $("#searchInput");
+    const searchResultsContainer = $("#searchResultsContainer");
+
+    // Function to fetch and display search results
+    function fetchSearchResults() {
+        const searchText = searchInput.val().trim();
+
+        if (searchText.length > 0) {
+            $.ajax({
+                url: "/Customer/CuraHub/Pharmacy/SearchMedicines",
+                type: "GET",
+                data: { searchText: searchText },
+                success: function (data) {
+                    searchResultsContainer.html(data);
+                }
+            });
+        } else {
+            searchResultsContainer.html("");
+        }
+    }
+
+    // Event listener for input typing
+    searchInput.on("input", fetchSearchResults);
+
+    // Select medicine from list
+    window.selectMedicine = function (name) {
+        searchInput.val(name);
+        searchResultsContainer.html("");
+    };
+
+    // Click event for dynamically created elements
+    $(document).on("click", function (event) {
+        if (!searchInput.is(event.target) && !searchResultsContainer.is(event.target) && searchResultsContainer.has(event.target).length === 0) {
+            searchResultsContainer.html("");
+        }
+    });
+    });
+</script>

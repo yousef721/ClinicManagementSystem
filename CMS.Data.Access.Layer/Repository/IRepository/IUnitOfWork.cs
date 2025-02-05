@@ -38,6 +38,10 @@ namespace CMS.Data.Access.Layer.Repository.IRepository
         IPharmacyCustomerRepository PharmacyCustomerRepository { get; }
         IPharmacyDeliveryRepresentativeRepository PharmacyDeliveryRepresentativeRepository { get; }
         IPharmacyOrderRepository PharmacyOrderRepository { get; }
+        IPharmacyCartRepository PharmacyCartRepository { get; }
+
+
+        
 
         // Medical Analysis Lab 
         IMedicalAnalysisLabAppointmentRepository MedicalAnalysisLabAppointmentRepository { get; }

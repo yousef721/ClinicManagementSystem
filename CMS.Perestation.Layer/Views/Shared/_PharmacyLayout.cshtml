@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CustomerFilter.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @* <link rel="stylesheet" href="~/CMS.Presentation.layer.styles.css" asp-append-version="true" /> *@
     <style>
         body {
@@ -58,7 +58,26 @@
             padding: 2rem 1rem;
             text-align: center;
         }
+        .badge {
+        padding-left: 9px;
+        padding-right: 9px;
+        -webkit-border-radius: 9px;
+        -moz-border-radius: 9px;
+        border-radius: 9px;
+        }
 
+        .label-warning[href],
+        .badge-warning[href] {
+        background-color: #c67605;
+        }
+        #lblCartCount {
+            font-size: 12px;
+            background: #ff0000;
+            color: #fff;
+            padding: 0 5px;
+            vertical-align: top;
+            margin-left: -10px; 
+        }
     </style>
 
 </head>
@@ -70,13 +89,11 @@
         @{
             var user = await _userManager.GetUserAsync(User);
         }
-        <nav class="navbar navbar-expand-lg position-fixed z-3 w-100" style="background-color:#006d77" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg z-3 w-100 mb-3" style="background-color:#006d77" data-bs-theme="dark">
             <div class="container-fluid">
-                <!-- Logo -->
                 <a class="navbar-brand" href="#">
                     <img src="~/Files/Images/Logo.webp" alt="Logo" width="50px" style="margin-left: 70px" class="d-inline-block align-text-top rounded-circle">
                 </a>
-                <!-- Navbar Brand -->
                 <a class="navbar-brand" href="/Customer/Home/Index">CuraHub</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -95,58 +112,60 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/Customer/Home/Contact">Contact</a>
                         </li>
-                        @* @if (User.IsInRole("Admin")) *@
-                        @* { *@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">management System</a>
-                            <div class="dropdown-menu">
-                                <div class="container">
-                                    <div class="row" style="width:700px">
-                                        <div class="col-md-3">
-                                            <h6 class="dropdown-header">Identity</h6>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">management System</a>
+                                <div class="dropdown-menu">
+                                    <div class="container">
+                                        <div class="row" style="width:700px">
+                                            <div class="col-md-3">
+                                                <h6 class="dropdown-header">Identity</h6>
 
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Identity/User/Index">Users</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Identity/Role/Index">Roles</a>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h6 class="dropdown-header">Clinic</h6>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Identity/User/Index">Users</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Identity/Role/Index">Roles</a>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="dropdown-header">Clinic</h6>
 
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Clinic/Doctor/Index">Doctors</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Clinic/ClinicReceptionist/Index">Clinic Receptionists</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Clinic/Specialization/Index">Specializations</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Clinic/Qualification/Index">Qualifications</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Clinic/RequestDoctor/Index">Request Doctors</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Clinic/Doctor/Index">Doctors</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Clinic/ClinicReceptionist/Index">Clinic Receptionists</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Clinic/Specialization/Index">Specializations</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Clinic/Qualification/Index">Qualifications</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Clinic/RequestDoctor/Index">Request Doctors</a>
 
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h6 class="dropdown-header">Pharmacy</h6>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6 class="dropdown-header">Pharmacy</h6>
 
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/Medicine/Index">Medicines</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/PharmacyCategory/Index">Categories</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/MedicineManufactory/Index">Manufactories</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/Pharmacist/Index">Pharmacists</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/PharmacyOrder/Index">Orders</a>
-                                            <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/PharmacyDeliveryRepresentative/Index">Delivery Representatives</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/Medicine/Index">Medicines</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/PharmacyCategory/Index">Categories</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/MedicineManufactory/Index">Manufactories</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/Pharmacist/Index">Pharmacists</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/PharmacyOrder/Index">Orders</a>
+                                                <a class="dropdown-item" href="/Admin/CuraHub/Pharmacy/PharmacyDeliveryRepresentative/Index">Delivery Representatives</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>                @* } *@
-
+                            </li>                
+                        }
                     </ul>
-
+                    
                     <ul class="navbar-nav">
 
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
-
-
                             <div class="d-flex align-items-center ms-auto">
-                                <!-- Notification Icon -->
                                 <div class="me-3">
                                     <i class="bi bi-bell-fill" style="font-size:24px; color:white;"></i>
                                 </div>
-                                <!-- Profile Picture and Dropdown -->
+                                <div class="me-3">
+                                    <a href="/Customer/CuraHub/Pharmacy/PharmacyCart/index">
+                                        <i class="fa-solid fa-cart-shopping" style="font-size:24px; color:white;"></i>
+                                        @* <span class='badge badge-warning' id='#cart-count-nav'>0</span> *@
+                                    </a>
+                                </div>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle p-0 m-0 d-flex align-items-center" style="background-color:#006d77" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-offset="0,10">
                                         <img src="~/Files/Images/profiles/@user?.ProfilePicture" alt="Image" width="30" height="30" class="rounded-circle me-2">
@@ -200,7 +219,6 @@
                                 <a class="nav-link " asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
-
                     </ul>
                 </div>
             </div>
@@ -215,7 +233,6 @@
             </main>
         </div>
     </div>
-    <!-- Features Section -->
     <section class="features-section">
         <div class="container">
             <div class="text-center mb-5">
@@ -251,10 +268,32 @@
         </div>
     </section>
     <partial name="_FooterPartial" />
-
+    <script>
+        var isAuthenticated = @Json.Serialize(User.Identity.IsAuthenticated);
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script>
+    @* function getCartCount() {
+        $.ajax({
+            url: '/Customer/CuraHub/Pharmacy/PharmacyCart/GetCartCount',
+            type: 'GET',
+            success: function (response) {
+                if (response) {
+                    $('#cart-count-nav').text(response.count);
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        getCartCount();
+    });
+
+    setInterval(getCartCount, 1000); // Refresh every 10 seconds *@
+</script>

@@ -1,0 +1,204 @@
+﻿@model List<CMS.Models.CuraHub.PharmacySection.PharmacyCart>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "~/Views/Shared/_PharmacyLayout.cshtml";
+}
+
+<section class="pt-5 pb-5">
+  <div class="container">
+    <div class="card shadow-lg p-3">
+        <div class="row w-100">
+            <div class="col-lg-12 col-md-12 col-12">
+                <h3 class="display-5 mb-2 text-center">Shopping Cart</h3>
+                <p class="mb-5 text-center">
+                    <i class="text-info font-weight-bold">@Model.Count</i> items in your cart</p>
+                <table id="shoppingCart" class="table table-condensed table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width:60%">Product</th>
+                            <th style="width:12%">Price</th>
+                            <th style="width:10%">Quantity</th>
+                            <th style="width:16%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr class="align-items-center" id="cart-item-@product.Medicine.Id">
+                                <td data-th="Product">
+                                    <div class="row">
+                                        <div class="col-md-3 text-left" style="width: 15%;">
+                                            <img src="~/Files/images/@product.Medicine.Img" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow">
+                                        </div>
+                                        <div class="col-md-9 text-left mt-sm-2">
+                                            <h4>@product.Medicine.Name</h4>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-th="Price">@product.Medicine.Price</td>
+                                <td data-th="Quantity">
+                                    <input type="number" id="count-@product.Medicine.Id" class="form-control form-control-lg text-center" value="@product.count" readonly>
+                                </td>
+                                <td class="actions" data-th="">
+                                    <div class="text-right">
+                                        <button class="btn btn-light border rounded-circle p-3 mx-2" id="plus-@product.Medicine.Id" onclick="updateCart(@product.Medicine.Id, 'PlusToCart', event)">
+                                            <i class="fas fa-plus text-primary"></i>
+                                        </button>
+
+                                        <button class="btn btn-light border rounded-circle p-3 mx-2" id="minus-@product.Medicine.Id" onclick="updateCart(@product.Medicine.Id, 'MinusFromCart', event)" style="@(product.count > 1 ? "display: inline-block;" : "display: none;")">
+                                            <i class="fas fa-minus text-primary"></i>
+                                        </button>
+
+                                        <button class="btn btn-light border rounded-circle p-3 mx-2" id="delete-@product.Medicine.Id" onclick="deleteItem(@product.Medicine.Id, event)" style="@(product.count == 1 ? "display: inline-block;" : "display: none;")">
+                                            <i class="fas fa-trash text-primary"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="float-right text-right d-flex align-items-center justify-content-center gap-2">
+                    <h4>Total Price:</h4>
+                    @{
+                        var total = 0.00;
+                        foreach (var product in Model)
+                        {
+                            total += product.Medicine.Price * product.count;
+                        }
+                    }
+                    <h1>@total </h1>
+                    <h2 style="display: inline-block;">EGP</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 d-flex align-items-center">
+            <div class="col-sm-6 order-md-2 text-right">
+                <a href="/Customer/CuraHub/Pharmacy/PharmacyCart/Pay" class="btn btn-primary mb-4 btn-lg pl-5 pr-5">Checkout</a>
+            </div>
+            <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
+                <a href="/Customer/CuraHub/Pharmacy/index">
+                    <i class="fas fa-arrow-left mr-2"></i> Continue Shopping
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div id="checkoutContainer"></div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<style>
+    .btn {
+        border-radius: 10px;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+
+<script>
+
+    @* $(document).ready(function () {
+        $("#checkoutBtn").click(function () {
+            $.get("/Customer/CuraHub/Pharmacy/PharmacyCart/SummaryOrder", function (data) {
+                $("#checkoutContainer").html(data);
+        });
+    });
+
+    $(document).on("submit", "#checkoutForm", function (event) {
+        event.preventDefault();
+        var form = $(this);
+        $.ajax({
+            url: form.attr("action"),
+            type: "POST",
+            data: form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    $("#checkoutContainer").html("");
+                } else {
+                    $("#checkoutContainer").html(response);
+                }
+            },
+            error: function () {
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        });
+    }); *@
+
+    // Function to update the cart (Add, Plus, Minus, Delete)
+    function updateCart(medicineId, action, event) {
+        event.preventDefault();
+        $.ajax({
+            url: `/Customer/CuraHub/Pharmacy/PharmacyCart/${action}`,
+            type: "POST",
+            data: { medicineId: medicineId },
+            success: function(response) {
+                if (response) {
+                    let countElement = $("#count-" + medicineId);
+                    let plusButton = $("#plus-" + medicineId);
+                    let minusButton = $("#minus-" + medicineId);
+                    let deleteButton = $("#delete-" + medicineId);
+
+                    // Update the count displayed
+                    countElement.val(response.count);
+
+                    // Show/hide buttons based on count
+                    if (response.count > 0) {
+                        plusButton.show();
+                        if (response.count == 1) {
+                            minusButton.hide();
+                            deleteButton.show();
+                        } else {
+                            minusButton.show();
+                            deleteButton.hide();
+                        }
+                    } else {
+                        plusButton.hide();
+                        minusButton.hide();
+                        deleteButton.hide();
+                    }
+
+                    // Update the total price
+                    updateTotalPrice();
+                }
+            }
+        });
+    }
+
+    function deleteItem(medicineId, event) {
+        event.preventDefault();
+        $.ajax({
+            url: `/Customer/CuraHub/Pharmacy/PharmacyCart/DeleteFromCart`,
+            type: "POST",
+            data: { medicineId: medicineId },
+            success: function() {
+                // Hide the cart item and update total price
+                $("#cart-item-" + medicineId).remove();
+                updateTotalPrice();
+            }
+        });
+    }
+
+    function updateTotalPrice() {
+        let total = 0.00;
+        $("tbody tr").each(function() {
+            let quantity = $(this).find("input[type='number']").val();
+            let price = parseFloat($(this).find("td:eq(1)").text());
+            total += price * quantity;
+        });
+        $(".float-right h1").text(total.toFixed(2));
+    }
+
+
+
+</script>

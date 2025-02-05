@@ -46,10 +46,10 @@ namespace CMS.Perestation.Layer.Areas.Customer.Controllers
         {
             return View();
         }
-        public IActionResult Pharmacy()
-        {
-            return View();
-        }
+        // public IActionResult Pharmacy()
+        // {
+        //     return View();
+        // }
         public IActionResult Lab()
         {
             return View();

@@ -10,6 +10,7 @@ using CMS.Data.Access.Layer.Repository.IRepository.ICuraHubRepository.IIdentityR
 using CMS.Data.Access.Layer.Repository.IRepository.ICuraHubRepository.IMedicalAnalysisLabRepository;
 using CMS.Data.Access.Layer.Repository.IRepository.ICuraHubRepository.IPharmacyRepository;
 using CMS.Data.Access.Layer.Repository.IRepository.IQ_ARepository;
+using CMS.Models.CuraHub.PharmacySection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,7 +85,10 @@ namespace CMS.Data.Access.Layer.Repository
 
         public IRequestMedicalAnalysisSpecialistRepository RequestMedicalAnalysisSpecialistRepository {  get; private set; }
 
+        public IPharmacyCartRepository PharmacyCartRepository { get; private set; }
+
         public IQuestionAndAnswerRepository QuestionAndAnswerRepository {  get; private set; }
+
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             this._dbContext = dbContext;
@@ -109,6 +113,8 @@ namespace CMS.Data.Access.Layer.Repository
             PharmacyCustomerRepository = new PharmacyCustomerRepository(_dbContext);
             PharmacyDeliveryRepresentativeRepository = new PharmacyDeliveryRepresentativeRepository(_dbContext);
             PharmacyOrderRepository = new PharmacyOrderRepository(_dbContext);
+            PharmacyCartRepository = new PharmacyCartRepository(_dbContext);
+
             MedicalAnalysisLabAppointmentRepository = new MedicalAnalysisLabAppointmentRepository(_dbContext);
             MedicalAnalysisLabBranchRepository = new MedicalAnalysisLabBranchRepository(_dbContext);
             MedicalAnalysisLabCustomerRepository = new MedicalAnalysisLabCustomerRepository(_dbContext);

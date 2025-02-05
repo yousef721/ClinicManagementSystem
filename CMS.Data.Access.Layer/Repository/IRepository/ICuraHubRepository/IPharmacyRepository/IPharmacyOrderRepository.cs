@@ -9,5 +9,6 @@ namespace CMS.Data.Access.Layer.Repository.IRepository.ICuraHubRepository.IPharm
 {
     public interface IPharmacyOrderRepository : IRepository<PharmacyOrder>
     {
+        
     }
 }

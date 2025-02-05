@@ -40,4 +40,4 @@ public class PharmacistVM
         public int ExperienceYears { get; set; }
         public string MedicalDegree { get; set; } = null!;
         public double Salary { get; set; }
-}   
+}  

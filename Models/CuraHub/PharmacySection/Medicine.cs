@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CMS.Models.CuraHub.IdentitySection;
 
 namespace CMS.Models.CuraHub.PharmacySection
 {
     public class Medicine
     {
-
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;

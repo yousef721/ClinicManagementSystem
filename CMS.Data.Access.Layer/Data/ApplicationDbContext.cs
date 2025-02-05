@@ -47,6 +47,7 @@ namespace CMS.Data.Access.Layer.Data
         public DbSet<PharmacyCustomer> PharmacyCustomers { get; set; }
         public DbSet<PharmacyDeliveryRepresentative> PharmacyDeliveryRepresentatives { get; set; }
         public DbSet<PharmacyOrder> PharmacyOrders { get; set; }
+        public DbSet<PharmacyCart> PharmacyCarts { get; set; }
 
         /// <summary>
         /// Medical Analysis Lab Tables
@@ -62,9 +63,6 @@ namespace CMS.Data.Access.Layer.Data
         public DbSet<MedicalAnalysisTestResult> MedicalAnalysisTestResults { get; set; }
         public DbSet<RequestMedicalAnalysisLabReceptionist> RequestMedicalAnalysisLabReceptionists { get; set; }
         public DbSet<RequestMedicalAnalysisSpecialist> RequestMedicalAnalysisSpecialists { get; set; }
-
-
-
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

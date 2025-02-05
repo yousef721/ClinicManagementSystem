@@ -9,6 +9,7 @@ namespace CMS.Models.CuraHub.PharmacySection
     public class PharmacyCategory
     {
         public int Id { get; set; }
+        public string? Img { get; set; }
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
 

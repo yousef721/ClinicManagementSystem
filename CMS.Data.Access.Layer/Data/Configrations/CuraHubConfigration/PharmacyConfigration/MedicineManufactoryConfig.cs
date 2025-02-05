@@ -21,22 +21,17 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.PharmacyC
                 .IsUnicode(true);
 
             builder.Property(e => e.Info)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(1000)
                 .IsUnicode(true);
 
-            builder.Property(e => e.Logo)
-                .IsRequired()
-                .HasMaxLength(100)
-                .IsUnicode(true);
-
             builder.Property(e => e.Phone)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(100)
                 .IsUnicode(true);
 
             builder.Property(e => e.Email)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(100)
                 .IsUnicode(true);
 

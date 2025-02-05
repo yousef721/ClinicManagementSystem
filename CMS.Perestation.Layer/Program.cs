@@ -5,10 +5,12 @@ using CMS.Data.Access.Layer.Repository.IRepository;
 //using CMS.Data.Access.Layer.Repository;
 //using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.IdentitySection;
+using CMS.Models.CuraHub.PharmacySection;
 using CMS.Perestation.Layer.DbInitilization;
 using CMS.Utitlities.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace CMS.Perestation.Layer
 {
@@ -23,6 +25,9 @@ namespace CMS.Perestation.Layer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             builder.Services.AddDbContext<ApplicationDbContext>
             (options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
