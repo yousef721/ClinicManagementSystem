@@ -1,0 +1,54 @@
+﻿@using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM
+@model MedicinesInOrderVM
+
+@{
+    ViewData["Title"] = "Customer Details";
+    Layout = "~/Views/Shared/_PharmacyLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Customer Details</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">@Model.PharmacyOrder.PharmacyCustomer.FirstName @Model.PharmacyOrder.PharmacyCustomer.LastName</h5>
+            <p class="card-text"><strong>Email:</strong> @Model.PharmacyOrder.PharmacyCustomer.Email</p>
+            <p class="card-text"><strong>Phone:</strong> @Model.PharmacyOrder.PharmacyCustomer.Phone</p>
+            <p class="card-text"><strong>Address:</strong> @Model.PharmacyOrder.PharmacyCustomer.Street, @Model.PharmacyOrder.PharmacyCustomer.City, @Model.PharmacyOrder.PharmacyCustomer.State</p>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Order</h3>
+            <div class="card mt-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Order #@Model.PharmacyOrder.Id</h5>
+                    <p class="card-text"><strong>Order Date:</strong> @Model.PharmacyOrder.DateTime.ToString("yyyy-MM-dd")</p>
+                    <p class="card-text"><strong>Status:</strong> @Model.PharmacyOrder.ShipmentStatus</p>
+                    <p class="card-text"><strong>Total Amount:</strong> $@Model.PharmacyOrder.TotalPrice</p>
+
+                    <h6 class="mt-3">Medicines in this Order:</h6>
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Medicine Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var medicine in Model.MedicineOrder)
+                                {
+                                    <tr>
+                                        <td>@medicine.Medicine.Name</td>
+                                        <td>@medicine.MedicineCount</td>
+                                        <td>@medicine.Medicine.Price EGP</td>
+                                        <td>@(medicine.MedicineCount * medicine.Medicine.Price) EGP</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+    <a href="/Customer/CuraHub/Pharmacy/UserOrders" class="btn btn-secondary mt-3">Back to Customers</a>
+</div>

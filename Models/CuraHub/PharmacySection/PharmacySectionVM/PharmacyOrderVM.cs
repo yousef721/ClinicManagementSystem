@@ -15,4 +15,5 @@ public class PharmacyOrderVM
         public PharmacyCustomerVM PharmacyCustomer { get; set; } = null!;
         public int PharmacyDeliveryRepresentativeId { get; set; }
         public PharmacyDeliveryRepresentativeVM? PharmacyDeliveryRepresentative { get; set; }
+        public List<MedicineOrderVM>? MedicineOrderVM { get; set; } = new List<MedicineOrderVM>();
 }

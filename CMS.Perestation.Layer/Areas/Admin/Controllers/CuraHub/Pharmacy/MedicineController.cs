@@ -2,160 +2,196 @@ using AutoMapper;
 using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.PharmacySection;
 using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
-using CMS.Utitlities.Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 
 namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
 {
     [Area(nameof(Admin))]
     [Route("Admin/CuraHub/Pharmacy/Medicine")]
-    
     public class MedicineController : Controller
     {
-        private readonly IUnitOfWork _uintOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private const int PageSize = 8;
 
-        public MedicineController(IUnitOfWork uintOfWork, IMapper mapper)
+        public MedicineController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this._uintOfWork = uintOfWork;
+            this._unitOfWork = unitOfWork;
             this._mapper = mapper;
         }
+
+        private CategoriesAndManufactoriesVM PopulateViewModel(MedicineVM? medicineVM = null)
+        {
+            var pharmacyCategories = _unitOfWork.PharmacyCategoryRepository.Retrive().ToList();
+            var manufactories = _unitOfWork.MedicineManufactoryRepository.Retrive().ToList();
+            CategoriesAndManufactoriesVM model = new CategoriesAndManufactoriesVM(){
+                PharmacyCategories = pharmacyCategories,
+                MedicineManufactories = manufactories,
+                MedicinesVM = medicineVM
+            };
+            return model;
+        }
+
+        private string HandleImageUpload(IFormFile file, string oldImagePath = null)
+        {
+            if (file == null || file.Length == 0) return oldImagePath;
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "Images", "Medicines", fileName);
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                file.CopyTo(stream);
+            }
+
+            if (!string.IsNullOrEmpty(oldImagePath))
+            {
+                var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "Images", "Medicines", oldImagePath);
+                if (System.IO.File.Exists(oldFilePath))
+                {
+                    System.IO.File.Delete(oldFilePath);
+                }
+            }
+
+            return fileName;
+        }
+
+        private void SetPaginationData(int pageNumber, int totalItems)
+        {
+            ViewBag.currentPage = pageNumber;
+            ViewBag.lastPage = (int)Math.Ceiling((double)totalItems / PageSize) - 1;
+        }
+
         [Route("Index")]
-        public ActionResult Index()
+        public ActionResult Index(int pageNumber = 0)
         {
-            var medicine = _uintOfWork.MedicineRepository.Retrive(includeProps: [e => e.MedicineManufactory, e => e.PharmacyCategory]).ToList();
-            var medicineVM = _mapper.Map<List<MedicineVM>>(medicine);
+            var medicines = _unitOfWork.MedicineRepository
+            .Retrive(includeProps: [e => e.MedicineManufactory, e => e.PharmacyCategory])
+            .Skip(pageNumber * PageSize)
+            .Take(PageSize)
+            .ToList();
+                
+            int totalItems = _unitOfWork.MedicineRepository.Retrive().Count();
+            SetPaginationData(pageNumber, totalItems);
+
+            var medicineVM = _mapper.Map<List<MedicineVM>>(medicines);
             return View(medicineVM);
         }
+
         [HttpGet]
         [Route("Create")]
-        public ActionResult Create()
+        public ActionResult Create(int pageNumber = 0)
         {
-            var pharmacyCategories = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
-            var manufactories = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            ViewData["PharmacyCategory"] = pharmacyCategories;
-            ViewData["MedicineManufactory"] = manufactories;
-            return View();
+            ViewBag.currentPage = pageNumber;
+            return View(PopulateViewModel());
         }
+
         [HttpPost]
         [Route("Create")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(MedicineVM medicineVM)
+        public ActionResult Create(CategoriesAndManufactoriesVM modelVM)
         {
-            ModelState.Remove("Img");
-            ModelState.Remove("PharmacyCategory");
-            ModelState.Remove("MedicineManufactory");
+            ModelState.Remove("MedicinesVM.Img");
             if (ModelState.IsValid)
             {
-                if (medicineVM.File != null && medicineVM.File.Length > 0)
-                {
-                    // Generate name
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(medicineVM.File.FileName);
+                modelVM.MedicinesVM.Img = HandleImageUpload(modelVM.MedicinesVM.File);
 
-                    // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileName);
+                var medicine = _mapper.Map<Medicine>(modelVM.MedicinesVM);
+                _unitOfWork.MedicineRepository.Create(medicine);
+                _unitOfWork.Commit();
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        medicineVM.File.CopyTo(stream);
-                    }
-                    // Save in db
-                    medicineVM.Img = fileName;
-                }
-                var medicine = _mapper.Map<Medicine>(medicineVM);
-                _uintOfWork.MedicineRepository.Create(medicine);
-                _uintOfWork.Commit();
-                return RedirectToAction(nameof(Index));
+                int totalItems = _unitOfWork.MedicineRepository.Retrive().Count();
+                SetPaginationData(0, totalItems);
+                return RedirectToAction(nameof(Index), new { pageNumber = ViewBag.lastPage });
             }
-            var pharmacyCategories = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
-            var manufactories = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            ViewData["PharmacyCategory"] = _mapper.Map<List<PharmacyCategoryVM>>(pharmacyCategories);
-            ViewData["MedicineManufactory"] = _mapper.Map<List<MedicineManufactoryVM>>(manufactories);
-            return View(medicineVM);
+
+            return View(PopulateViewModel(modelVM.MedicinesVM));
         }
+
         [HttpGet]
         [Route("Edit")]
-        public ActionResult Edit(int id) 
+        public ActionResult Edit(int id, int pageNumber)
         {
-            var medicine = _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == id);
+            var medicine = _unitOfWork.MedicineRepository.RetriveItem(e => e.Id == id);
+            if (medicine == null) return NotFound();
+
             var medicineVM = _mapper.Map<MedicineVM>(medicine);
-            ViewData["MedicineManufactory"] = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            ViewData["PharmacyCategory"] = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
-            return View(medicineVM);
+            ViewBag.currentPage = pageNumber;
+
+            return View(PopulateViewModel(medicineVM));
         }
+
         [HttpPost]
         [Route("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(MedicineVM medicineVM) 
+        public ActionResult Edit(CategoriesAndManufactoriesVM modelVM, int pageNumber = 0)
         {
-            ModelState.Remove("Img");
-            ModelState.Remove("PharmacyCategory");
-            ModelState.Remove("Manufactories");
-            ModelState.Remove("File");
-            var oldMedicine = _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == medicineVM.Id, trancked: false);
+            ModelState.Remove("MedicinesVM.Img");
+            ModelState.Remove("MedicinesVM.File");
+
+            var oldMedicine = _unitOfWork.MedicineRepository.RetriveItem(e => e.Id == modelVM.MedicinesVM.Id, trancked: false);
+            if (oldMedicine == null) return NotFound();
+
             if (ModelState.IsValid)
             {
-                if (medicineVM.File != null && medicineVM.File.Length > 0)
-                {
-                    // Generate name
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(medicineVM.File.FileName);
+                modelVM.MedicinesVM.Img = HandleImageUpload(modelVM.MedicinesVM.File, oldMedicine?.Img);
 
-                    // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileName);
+                var medicine = _mapper.Map<Medicine>(modelVM.MedicinesVM);
+                _unitOfWork.MedicineRepository.Update(medicine);
+                _unitOfWork.Commit();
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        medicineVM.File.CopyTo(stream);
-                    }
-
-                    // Delete old img
-                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", oldMedicine.Img);
-                    if (System.IO.File.Exists(oldPath))
-                    {
-                        System.IO.File.Delete(oldPath);
-                    }
-                    // Save new img
-                    medicineVM.Img = fileName;
-                } else
-                {
-                    medicineVM.Img = oldMedicine.Img;
-                }
-                var medicine = _mapper.Map<Medicine>(medicineVM);
-                _uintOfWork.MedicineRepository.Update(medicine);
-                _uintOfWork.Commit();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index), new { pageNumber });
             }
-            var pharmacyCategories = _uintOfWork.PharmacyCategoryRepository.Retrive().ToList();
-            var manufactories = _uintOfWork.MedicineManufactoryRepository.Retrive().ToList();
-            ViewData["PharmacyCategory"] = pharmacyCategories;
-            ViewData["MedicineManufactory"] = manufactories;
+
+            ViewBag.currentPage = pageNumber;
+            return View(PopulateViewModel(modelVM.MedicinesVM));
+        }
+
+        [Route(nameof(Details))]
+        public ActionResult Details(int id, int pageNumber = 0)
+        {
+            var medicine = _unitOfWork.MedicineRepository.RetriveItem(e => e.Id == id, includeProps: [e => e.MedicineManufactory, e => e.PharmacyCategory]);
+            if (medicine == null) return NotFound();
+
+            ViewBag.currentPage = pageNumber;
+            var medicineVM = _mapper.Map<MedicineVM>(medicine);
             return View(medicineVM);
         }
-        [Route(nameof(Details))]
-        public ActionResult Details(int id)
-        {
-            var medicine =  _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == id, [e => e.MedicineManufactory, e => e.PharmacyCategory]);
-            if(medicine != null)
-            {
-                var medicineVM = _mapper.Map<MedicineVM>(medicine);
-                return View(medicineVM);
-            }
-            return RedirectToAction("Index");
-        }
+
         [HttpGet]
         [Route("Delete")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, int pageNumber = 0)
         {
-            var medicine = _uintOfWork.MedicineRepository.RetriveItem(e => e.Id == id);
-            if (System.IO.File.Exists(medicine.Img))
+            var medicine = _unitOfWork.MedicineRepository.RetriveItem(e => e.Id == id);
+            if (medicine == null) return NotFound();
+
+            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "Images", "Medicines", medicine.Img);
+
+            if (System.IO.File.Exists(imagePath))
             {
-                System.IO.File.Delete(medicine.Img);
+                System.IO.File.Delete(imagePath);
             }
-            _uintOfWork.MedicineRepository.Delete(medicine);
-            _uintOfWork.Commit();
-            return RedirectToAction("Index");
+
+            _unitOfWork.MedicineRepository.Delete(medicine);
+            _unitOfWork.Commit();
+
+            // TempData["Success"] = "Medicine deleted successfully.";
+            return RedirectToAction("Index", new { pageNumber });
+        }
+
+        [HttpGet]
+        [Route("Search")]
+        public IActionResult Search(string searchText, int pageNumber = 0)
+        {
+            var medicines = _unitOfWork.MedicineRepository
+                .Retrive(e => e.Name.ToLower().Contains(searchText.ToLower()), includeProps: [e => e.MedicineManufactory, e => e.PharmacyCategory])
+                .Skip(pageNumber * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            var medicineVM = _mapper.Map<List<MedicineVM>>(medicines);
+            return PartialView("_Search", medicineVM);
         }
     }
 }

@@ -21,9 +21,11 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         }
 
         [Route("Index")]
-        public IActionResult Index()
+        public IActionResult Index(int pageNumber)
         {
-            var pharmacists = _unitOfWork.PharmacistRepository.Retrive().ToList();
+            var pharmacists = _unitOfWork.PharmacistRepository.Retrive();
+            pharmacists = pharmacists.Skip(pageNumber * 8).Take(8);
+            pharmacists.ToList();
             var pharmacistsVM = _mapper.Map<List<PharmacistVM>>(pharmacists);
             return View(pharmacistsVM);
         }

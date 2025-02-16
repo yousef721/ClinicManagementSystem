@@ -15,6 +15,7 @@ namespace CMS.Models.CuraHub.PharmacySection
         public double Price { get; set; }
         public int Quantity { get; set; }
         public double PurchasePrice { get; set; }
+        public string Status { get; set; } = null!;
         public string Img { get; set; } = null!;
         public int PharmacyCategoryId { get; set; }
         public PharmacyCategory PharmacyCategory { get; set; } = new PharmacyCategory();

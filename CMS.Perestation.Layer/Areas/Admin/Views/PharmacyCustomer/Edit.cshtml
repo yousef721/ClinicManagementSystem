@@ -10,134 +10,69 @@
     <div class="card shadow p-4 rounded">
         <form asp-action="Edit" method="post" class="needs-validation" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
-            <div class="d-flex flex-row mb-3">
-                <div class="form-group d-flex  w-50">
-                    <input asp-for="@Model.FirstName" class="form-control me-4" type="text" placeholder="First Name" />
-                    <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+            <input type="hidden" name="pageNumber" value="@ViewBag.currentPage"/>
+            <div class="d-flex flex-row mb-3 gap-3">
+                <div class="form-group w-50">
+                    <label asp-for="FirstName" class="control-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control me-4" type="text" placeholder="First Name" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
-                <div class="form-group d-flex w-50">
-                    <input asp-for="@Model.LastName" class="form-control" type="text" placeholder="Last Name" />
-                    <span asp-validation-for="@Model.LastName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="d-flex flex-row mb-3">
-                <div class="form-group d-flex w-50">
-                    <input asp-for="@Model.Email" class="form-control me-4" type="email" placeholder="Email" />
-                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
-                </div>
-                <div class="form-group d-flex w-50">
-                    <input asp-for="@Model.Phone" class="form-control" type="tel" placeholder="Phone Number" />
-                    <span asp-validation-for="@Model.Phone" class="text-danger"></span>
+                <div class="form-group w-50">
+                    <label asp-for="LastName" class="control-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" type="text" placeholder="Last Name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
-            <div class="d-flex flex-row mb-3">
-                <div class="form-group d-flex w-50">
-                    <select class="form-control me-4" asp-for="@Model.State">
+            <div class="d-flex flex-row mb-3 gap-3">
+                <div class="form-group w-50">
+                    <label asp-for="Email" class="control-label">Email</label>
+                    <input asp-for="Email" class="form-control me-4" type="email" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group w-50">
+                    <label asp-for="Phone" class="control-label">Phone Number</label>
+                    <input asp-for="Phone" class="form-control" type="tel" placeholder="Phone Number" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="d-flex flex-row mb-3 gap-3">
+                <div class="form-group w-50">
+                    <label asp-for="State" class="control-label">State</label>
+                    <select class="form-control me-4" asp-for="State">
                         <option selected>Select State</option>
-                        <option value="Alexandria">Alexandria</option>
-                        <option value="Aswan">Aswan</option>
-                        <option value="Asyut">Asyut</option>
-                        <option value="Beheira">Beheira</option>
-                        <option value="Beni Suef">Beni Suef</option>
-                        <option value="Cairo">Cairo</option>
-                        <option value="Dakahlia">Dakahlia</option>
-                        <option value="Damietta">Damietta</option>
-                        <option value="Faiyum">Faiyum</option>
-                        <option value="Gharbia">Gharbia</option>
-                        <option value="Giza">Giza</option>
-                        <option value="Ismailia">Ismailia</option>
-                        <option value="Kafr el-Sheikh">Kafr el-Sheikh</option>
-                        <option value="Luxor">Luxor</option>
-                        <option value="Matrouh">Matrouh</option>
-                        <option value="Minya">Minya</option>
-                        <option value="Monufia">Monufia</option>
-                        <option value="New Valley">New Valley</option>
-                        <option value="North Sinai">North Sinai</option>
-                        <option value="Port Said">Port Said</option>
-                        <option value="Qalyubia">Qalyubia</option>
-                        <option value="Qena">Qena</option>
-                        <option value="Red Sea">Red Sea</option>
-                        <option value="Sohag">Sohag</option>
-                        <option value="South Sinai">South Sinai</option>
-                        <option value="Suez">Suez</option>
-                        <option value="Sharqia">Sharqia</option>
+                        @foreach (var item in CMS.Utitlities.StaticData.State.States)
+                        {
+                            <option value="@item">@item</option>
+                        }
                     </select>
                     <span asp-validation-for="State" class="text-danger"></span>
                 </div>
-                <div class="form-group d-flex w-50">
-                    <select class="form-control" asp-for="@Model.City">
+                <div class="form-group w-50">
+                    <label asp-for="City" class="control-label">City</label>
+                    <select class="form-control" asp-for="City">
                         <option selected>Select City</option>
-                        <option value="ObourCity">ObourCity</option>
-                        <option value="NaserCity">NaserCity</option>
-                        <option value="Madinty">Madinty</option>
-                        <option value="Elasama-Eldaryia">Elasama-Eldaryia</option>
-                        <option value="El-Tgmoa El-Khames">El-Tgmoa El-Khames</option>
-                        <option value="El-Salam">El-Salam</option>
+                        @foreach (var item in CMS.Utitlities.StaticData.City.cities)
+                        {
+                            <option value="@item">@item</option>
+                        }
                     </select>
-                    <span asp-validation-for="@Model.City" class="text-danger"></span>
+                    <span asp-validation-for="City" class="text-danger"></span>
                 </div>
             </div>
-            <div class="d-flex flex-row mb-3">
-                <div class="form-group d-flex w-50">
-                    <input asp-for="@Model.Region" class="form-control me-4" type="text" placeholder="Region" />
-                    <span asp-validation-for="@Model.Region" class="text-danger"></span>
+            <div class="d-flex flex-row mb-3 gap-3">
+                <div class="form-group w-50">
+                    <label asp-for="Region" class="control-label">Region</label>
+                    <input asp-for="Region" class="form-control me-4" type="text" placeholder="Region" />
+                    <span asp-validation-for="Region" class="text-danger"></span>
                 </div>
-                <div class="form-group d-flex w-50">
-                    <input asp-for="@Model.Street" class="form-control" type="text" placeholder="Street" />
-                    <span asp-validation-for="@Model.Street" class="text-danger"></span>
-                </div>
-            </div>
-            @* <div class="d-flex flex-row mb-3">
-                <div class="form-group d-flex align-items-center w-25">
-                    <label asp-for="@Model.Gender" class="control-label me-5">Gender</label>
-                    <input asp-for="@Model.Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Male" checked />
-                    <label class="form-check-label me-2" asp-for="Gender">
-                        Male
-                    </label>
-                    <input asp-for="@Model.Gender" class="form-control form-check-input me-1" type="radio" value="@Gender.Female" />
-                    <label class="form-check-label me-2" asp-for="@Model.Gender">
-                        Female
-                    </label>
-                    <span asp-validation-for="@Model.Gender" class="text-danger"></span>
-                </div>
-                <div class="form-group d-flex align-items-center w-75">
-                    <label asp-for="@Model.DateOfBirth" class="control-label w-25"></label>
-                    <input asp-for="@Model.DateOfBirth" class="form-control w-100" type="date" />
-                    <span asp-validation-for="@Model.DateOfBirth" class="text-danger"></span>
+                <div class="form-group w-50">
+                    <label asp-for="Street" class="control-label">Street</label>
+                    <input asp-for="Street" class="form-control" type="text" placeholder="Street" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
                 </div>
             </div>
-            <div class="d-flex flex-row mb-3">
-                <div class="form-group d-flex w-25">
-                    <input asp-for="@Model.PersonalNationalIDNumber" class="form-control" type="text" placeholder="Personal National ID Number" />
-                    <span asp-validation-for="@Model.PersonalNationalIDNumber" class="text-danger"></span>
-                </div>
-                <div class="form-group d-flex align-items-center w-75">
-                    <label asp-for="@Model.FileNationalIDCard" class="control-label w-25">Photo CardID</label>
-                    <input asp-for="@Model.FileNationalIDCard" class="form-control w-100" type="file" placeholder="Personal National ID Card" />
-                    @if (Model.PersonalNationalIDCard != null)
-                    {
-                        <div class="ms-1">
-                            <img src="~/Files/Images/@Model.PersonalNationalIDCard" alt="Profile Photo" class="img-thumbnail" style="width: 50px; height: 50px;" />
-                        </div>
-                    }
-                   <span asp-validation-for="@Model.FileNationalIDCard" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="d-flex flex-row">
-                <div class="form-group d-flex align-items-center w-100">
-                    <label asp-for="@Model.FileProfile" class="control-label me-3">Photo</label>
-                    <input asp-for="@Model.FileProfile" class="form-control" type="file" />
-                    @if (Model.ProfilePicture != null)
-                    {
-                        <div class="ms-1">
-                            <img src="~/Files/Images/@Model.ProfilePicture" alt="Profile Photo" class="img-thumbnail" style="width: 50px; height: 50px;" />
-                        </div>
-                    }
-                    <span asp-validation-for="@Model.FileProfile" class="text-danger"></span>
-                </div>
-            </div>  *@
-            <button type="submit" class="btn btn-primary mt-4">Edit</button>
-            <a asp-action="Index" class="btn btn-secondary mt-4">Cancel</a>
+            <button type="submit" class="btn btn-primary mt-3">Edit</button>
+            <a asp-action="Index" asp-route-pageNumber="@ViewBag.currentPage" class="btn btn-secondary mt-3">Cancel</a>
         </form>
     </div>
 </div>

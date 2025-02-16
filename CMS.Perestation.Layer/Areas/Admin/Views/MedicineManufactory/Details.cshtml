@@ -1,10 +1,9 @@
 ﻿@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.MedicineManufactoryVM
 
 @{
-    ViewData["Title"] = "Medicine Manufactory Details";
+    Layout = "~/Views/Shared/_CuraHubLayout.cshtml";
 }
 <div class="container mt-5">
-    <h1>@ViewData["Title"]</h1>
     <div class="card shadow p-4 rounded">
         <div class="card">
             <div class="card-header">
@@ -13,8 +12,8 @@
             <div class="card-body">
                 <p><strong>Name:</strong> @Model.Name</p>
                 <div>
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-pageNumber="@ViewBag.currentPage" class="btn btn-primary">Edit</a>
+                    <a asp-action="Index" asp-route-pageNumber="@ViewBag.currentPage" class="btn btn-secondary">Cancel</a>
                 </div>
             </div>
         </div>

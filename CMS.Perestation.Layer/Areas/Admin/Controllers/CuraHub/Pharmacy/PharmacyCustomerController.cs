@@ -4,7 +4,6 @@ using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
 using CMS.Models.CuraHub.PharmacySection;
 
-
 namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
 {
     [Area(nameof(Admin))]
@@ -13,6 +12,7 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private const int PageSize = 8;
 
         public PharmacyCustomerController(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -20,17 +20,33 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
             _mapper = mapper;
         }
 
-        [Route("Index")]
-        public IActionResult Index()
+        private void SetPaginationData(int pageNumber, int totalItems)
         {
-            var pharmacyCustomer = _unitOfWork.PharmacyCustomerRepository.Retrive().ToList();
-            var pharmacyCustomerVM = _mapper.Map<List<PharmacyCustomerVM>>(pharmacyCustomer);
+            ViewBag.currentPage = pageNumber;
+            ViewBag.lastPage = (int)Math.Ceiling((double)totalItems / PageSize) - 1;
+        }
+
+        [Route("Index")]
+        public IActionResult Index(int pageNumber = 0)
+        {
+            var pharmacyCustomers = _unitOfWork.PharmacyCustomerRepository
+                .Retrive()
+                .Skip(pageNumber * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            int totalItems = _unitOfWork.PharmacyCustomerRepository.Retrive().Count();
+            SetPaginationData(pageNumber, totalItems);
+            
+            var pharmacyCustomerVM = _mapper.Map<List<PharmacyCustomerVM>>(pharmacyCustomers);
             return View(pharmacyCustomerVM);
         }
+
         [HttpGet]
         [Route("Create")]
-        public IActionResult Create()
+        public IActionResult Create(int pageNumber = 0)
         {
+            ViewBag.currentPage = pageNumber;
             return View();
         }
 
@@ -39,166 +55,85 @@ namespace CMS.Perestation.Layer.Areas.Admin.Controllers.CuraHub.Pharmacy
         [ValidateAntiForgeryToken]
         public IActionResult Create(PharmacyCustomerVM pharmacyCustomerVM)
         {
-            ModelState.Remove("ProfilePicture");
-            ModelState.Remove("PersonalNationalIDCard");
             if (ModelState.IsValid)
-            {
-                //if (pharmacyCustomerVM.FileProfile != null && pharmacyCustomerVM.FileProfile.Length > 0)
-                //{
-                //    // Generate name
-                //    var fileProfile = Guid.NewGuid().ToString() + Path.GetExtension(pharmacyCustomerVM.FileProfile.FileName);
-
-                //    // Save in wwwroot
-                //    var filePathProfile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileProfile);
-
-                //    using (var stream = System.IO.File.Create(filePathProfile))
-                //    {
-                //        pharmacyCustomerVM.FileProfile.CopyTo(stream);
-                //    }
-                //    // Save in db
-                //    pharmacyCustomerVM.ProfilePicture = fileProfile;
-                //}
-                //if (pharmacyCustomerVM.FileNationalIDCard != null && pharmacyCustomerVM.FileNationalIDCard.Length > 0)
-                //{
-                //    // Generate name
-                //    var fileCard = Guid.NewGuid().ToString() + Path.GetExtension(pharmacyCustomerVM.FileNationalIDCard.FileName);
-
-                //    // Save in wwwroot
-                //    var filePathCard = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileCard);
-
-                //    using (var stream = System.IO.File.Create(filePathCard))
-                //    {
-                //        pharmacyCustomerVM.FileNationalIDCard.CopyTo(stream);
-                //    }
-                //    // Save in db
-                //    pharmacyCustomerVM.PersonalNationalIDCard = fileCard;
-                //}
-               
-                
+            {   
                 var pharmacyCustomer = _mapper.Map<PharmacyCustomer>(pharmacyCustomerVM);
                 _unitOfWork.PharmacyCustomerRepository.Create(pharmacyCustomer);
                 _unitOfWork.Commit();
-                return RedirectToAction(nameof(Index));
+                
+                int totalItems = _unitOfWork.PharmacyCustomerRepository.Retrive().Count();
+                SetPaginationData(0, totalItems);
+                
+                return RedirectToAction(nameof(Index), new { pageNumber = ViewBag.lastPage });
             }
             return View(pharmacyCustomerVM);
         }
 
-
         [HttpGet]
         [Route("Edit")]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int id, int pageNumber = 0)
         {
             var pharmacyCustomer = _unitOfWork.PharmacyCustomerRepository.RetriveItem(p => p.Id == id);
             if (pharmacyCustomer == null) return NotFound();
 
             var pharmacyCustomerVM = _mapper.Map<PharmacyCustomerVM>(pharmacyCustomer);
+            ViewBag.currentPage = pageNumber;
+            
             return View(pharmacyCustomerVM);
         }
 
         [HttpPost]
         [Route("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PharmacyCustomerVM pharmacyCustomerVM)
+        public IActionResult Edit(PharmacyCustomerVM pharmacyCustomerVM, int pageNumber = 0)
         {
-            ModelState.Remove("ProfilePicture");
-            ModelState.Remove("PersonalNationalIDCard");
-            ModelState.Remove("FileProfile");
-            ModelState.Remove("FileNationalIDCard");
-            var oldCustomerPhoto = _unitOfWork.PharmacyCustomerRepository.RetriveItem(e => e.Id == pharmacyCustomerVM.Id, trancked: false);
             if (ModelState.IsValid)
             {
-                #region
-
-                //if (pharmacyCustomerVM.FileProfile != null && pharmacyCustomerVM.FileProfile.Length > 0)
-                //{
-                //    // Generate name
-                //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(pharmacyCustomerVM.FileProfile.FileName);
-
-                //    // Save in wwwroot
-                //    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileName);
-
-                //    using (var stream = System.IO.File.Create(filePath))
-                //    {
-                //        pharmacyCustomerVM.FileProfile.CopyTo(stream);
-                //    }
-
-                //    // Delete old img
-                //    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "Images", oldCustomerPhoto.ProfilePicture);
-                //    if (System.IO.File.Exists(oldPath))
-                //    {
-                //        System.IO.File.Delete(oldPath);
-                //    }
-                //    // Save new img
-                //    pharmacyCustomerVM.ProfilePicture = fileName;
-                //} else
-                //{
-                //    pharmacyCustomerVM.ProfilePicture = oldCustomerPhoto.ProfilePicture;
-
-                //}
-                //if (pharmacyCustomerVM.FileNationalIDCard != null && pharmacyCustomerVM.FileNationalIDCard.Length > 0)
-                //{
-                //    // Generate name
-                //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(pharmacyCustomerVM.FileNationalIDCard.FileName);
-
-                //    // Save in wwwroot
-                //    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", fileName);
-
-                //    using (var stream = System.IO.File.Create(filePath))
-                //    {
-                //        pharmacyCustomerVM.FileNationalIDCard.CopyTo(stream);
-                //    }
-
-                //    // Delete old img
-                //    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Files", "images", oldCustomerPhoto.PersonalNationalIDCard);
-                //    if (System.IO.File.Exists(oldPath))
-                //    {
-                //        System.IO.File.Delete(oldPath);
-                //    }
-                //    // Save new img
-                //    pharmacyCustomerVM.PersonalNationalIDCard = fileName;
-                //} else 
-                //{
-                //    pharmacyCustomerVM.PersonalNationalIDCard = oldCustomerPhoto.PersonalNationalIDCard;
-                //}
-                #endregion
                 var pharmacyCustomer = _mapper.Map<PharmacyCustomer>(pharmacyCustomerVM);
                 _unitOfWork.PharmacyCustomerRepository.Update(pharmacyCustomer);
                 _unitOfWork.Commit();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { pageNumber });
             }
-
+            ViewBag.currentPage = pageNumber;
             return View(pharmacyCustomerVM);
         }
+
         [HttpGet]
         [Route("Details")]
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, int pageNumber = 0)
         {
-            var pharmacyCustomer = _unitOfWork.PharmacyCustomerRepository.RetriveItem(d => d.Id == id, [d => d.PharmacyOrders]);
+            var pharmacyCustomer = _unitOfWork.PharmacyCustomerRepository.RetriveItem(d => d.Id == id, [e => e.PharmacyOrders]);
             if (pharmacyCustomer == null) return NotFound();
 
             var pharmacyCustomerVM = _mapper.Map<PharmacyCustomerVM>(pharmacyCustomer);
+            ViewBag.currentPage = pageNumber;
             return View(pharmacyCustomerVM);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int id, int pageNumber = 0)
         {
             var pharmacyCustomer = _unitOfWork.PharmacyCustomerRepository.RetriveItem(p => p.Id == id);
             if (pharmacyCustomer == null) return NotFound();
-            //if (System.IO.File.Exists(pharmacyCustomer.ProfilePicture))
-            //{
-            //    System.IO.File.Delete(pharmacyCustomer.ProfilePicture);
-            //}
-            //if (System.IO.File.Exists(pharmacyCustomer.PersonalNationalIDCard))
-            //{
-            //    System.IO.File.Delete(pharmacyCustomer.PersonalNationalIDCard);
-            //}
 
             _unitOfWork.PharmacyCustomerRepository.Delete(pharmacyCustomer);
             _unitOfWork.Commit();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new { pageNumber });
+        }
+
+        [HttpGet]
+        [Route("Search")]
+        public IActionResult Search(string searchText, int pageNumber = 0)
+        {
+            var customers = _unitOfWork.PharmacyCustomerRepository
+                .Retrive(e => e.FirstName.ToLower().Contains(searchText.ToLower()) || e.LastName.ToLower().Contains(searchText.ToLower()) || e.Email.ToLower().Contains(searchText.ToLower()) || e.Phone.Contains(searchText))
+                .Skip(pageNumber * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            var customersVM = _mapper.Map<List<PharmacyCustomerVM>>(customers);
+            return PartialView("_Search", customersVM);
         }
     }
 }

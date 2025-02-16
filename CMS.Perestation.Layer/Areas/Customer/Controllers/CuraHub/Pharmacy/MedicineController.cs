@@ -1,8 +1,5 @@
-using AutoMapper;
-using CMS.Data.Access.Layer.Repository;
 using CMS.Data.Access.Layer.Repository.IRepository;
 using CMS.Models.CuraHub.IdentitySection;
-using CMS.Models.CuraHub.PharmacySection;
 using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

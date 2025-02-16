@@ -21,6 +21,7 @@ public class MedicineVM
     [Required(ErrorMessage = "Please upload a file.")]
     [DataType(DataType.Upload)]
     public IFormFile File { get; set; }
+    
     [Required(ErrorMessage = "Please select a pharmacy category.")]
     public int PharmacyCategoryId { get; set; }
     public PharmacyCategoryVM? PharmacyCategory { get; set; }
@@ -28,8 +29,5 @@ public class MedicineVM
     [Required(ErrorMessage = "Please select a manufactory.")]
     public int MedicineManufactoryId { get; set; }
     public MedicineManufactoryVM? MedicineManufactory { get; set; }
-    public MedicineVM()
-    {
-        Status = "Box";
-    }
+    
 }

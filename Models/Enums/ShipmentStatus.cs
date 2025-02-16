@@ -8,6 +8,6 @@ namespace CMS.Models.Enums
 {
     public enum ShipmentStatus
     {
-        Pending, InTransit, Delivered
+        Pending, Paid, Failed, Transited, Delivered, Cancelled
     }
 }

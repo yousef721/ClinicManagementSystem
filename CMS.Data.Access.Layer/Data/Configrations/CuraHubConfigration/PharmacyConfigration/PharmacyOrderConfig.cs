@@ -17,12 +17,14 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.PharmacyC
 
             builder.HasOne(e => e.PharmacyDeliveryRepresentative)
                  .WithMany(e => e.PharmacyOrders)
-                 .HasForeignKey(e => e.PharmacyDeliveryRepresentativeId);
+                 .HasForeignKey(e => e.PharmacyDeliveryRepresentativeId)
+                 .IsRequired(false);
 
             builder.HasOne(e => e.PharmacyCustomer)
                 .WithMany(e => e.PharmacyOrders)
                 .HasForeignKey(e => e.PharmacyCustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
                 
 
             builder.HasMany(e => e.MedicineOrders)
@@ -31,7 +33,6 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.PharmacyC
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("PharmacyOrders", "Pharmacy");
-
 
         }
     }

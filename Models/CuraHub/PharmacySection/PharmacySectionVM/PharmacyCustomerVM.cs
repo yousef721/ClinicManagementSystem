@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using CMS.Models.CuraHub.IdentitySection;
+using CMS.Models.CuraHub.IdentitySection.IdentitySectionVM;
 using Microsoft.AspNetCore.Http;
 
 namespace CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
@@ -18,19 +20,5 @@ public class PharmacyCustomerVM
         public string City { get; set; } = null!;
         public string Region { get; set; } = null!;
         public string Street { get; set; } = null!;   
-        // [RegularExpression("^(A+|A-|B+|B-|AB+|AB-|O+|O-)$", ErrorMessage = "Blood Type must be 'A+','A-','B+','B-','AB+','AB-','O+','O-'")]
-        // public string? BloodType { get; set; }
-        // public DateOnly DateOfBirth { get; set; }
-        // [RegularExpression("^(Male|Female)$", ErrorMessage = "Gender must be 'Male' or 'Female'.")]
-        // public string Gender { get; set; } = null!;
-        // public string ProfilePicture { get; set; } = null!;
-        // [Required(ErrorMessage = "Please upload a file.")]
-        // [DataType(DataType.Upload)]
-        // public IFormFile FileProfile { get; set; }
-        // public string PersonalNationalIDNumber { get; set; } = null!;
-        // public string PersonalNationalIDCard { get; set; } = null!; 
-        // [Required(ErrorMessage = "Please upload a file.")]
-        // [DataType(DataType.Upload)]
-        // public IFormFile FileNationalIDCard { get; set; }
         public List<PharmacyOrderVM>? PharmacyOrders { get; set; }
 }

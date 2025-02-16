@@ -1,74 +1,43 @@
 ﻿@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.PharmacyDeliveryRepresentativeVM
 
+@{
+    Layout = "~/Views/Shared/_CuraHubLayout.cshtml";
+}
+
 <div class="container mt-5">
-    <h2>Pharmacist @Model.FirstName Details</h2>
-    <div class="card shadow-lg p-4 rounded">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <dl class="row">
-                    <dt class="col-sm-3 font-weight-bold">First Name</dt>
-                    <dd class="col-sm-9">@Model.FirstName</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Last Name</dt>
-                    <dd class="col-sm-9">@Model.LastName</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Email</dt>
-                    <dd class="col-sm-9">@Model.Email</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Phone</dt>
-                    <dd class="col-sm-9">@Model.Phone</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">State</dt>
-                    <dd class="col-sm-9">@Model.State</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">City</dt>
-                    <dd class="col-sm-9">@Model.City</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Region</dt>
-                    <dd class="col-sm-9">@Model.Region</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Street</dt>
-                    <dd class="col-sm-9">@Model.Street</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Gender</dt>
-                    <dd class="col-sm-9">@Model.Gender</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Date of Birth</dt>
-                    <dd class="col-sm-9">@Model.DateOfBirth</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Profile Picture</dt>
-                    <dd class="col-sm-9">
-                        <img src="~/Files/Images/@Model.ProfilePicture" alt="Profile Picture" class="img-fluid" style="max-width:200px; max-height:200px;" />
-                    </dd>
-                    <dt class="col-sm-3 font-weight-bold">National ID Number</dt>
-                    <dd class="col-sm-9">@Model.PersonalNationalIDNumber</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">National ID Card</dt>
-                    <dd class="col-sm-9">
-                        <img src="~/Files/Images/@Model.PersonalNationalIDCard" alt="Profile Picture" class="img-fluid" style="max-width:200px; max-height:200px;" />
-                    </dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Marital Status</dt>
-                    <dd class="col-sm-9">@Model.MaritalStatus</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Start Work</dt>
-                    <dd class="col-sm-9">@Model.StartWork</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">End Work</dt>
-                    <dd class="col-sm-9">@Model.EndWork</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Application User ID</dt>
-                    <dd class="col-sm-9">@Model.ApplicationUserId</dd>
-
-                    <dt class="col-sm-3 font-weight-bold">Salary</dt>
-                    <dd class="col-sm-9">@Model.Salary</dd>
-                </dl>
+    <div class="card shadow p-4 rounded">
+        <div class="card">
+            <div class="card-header">
+                <h2>Delivery Representative: @Model.FirstName @Model.LastName</h2>
             </div>
-        </div>
-
-        <div class="mt-4">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img src="~/Files/Images/PharmacyDelivery/@Model.ProfilePicture" alt="Profile Picture" class="img-fluid rounded" style="max-width:200px; max-height:200px;" />
+                    </div>
+                    <div class="col-md-8">
+                        <p><strong>Email:</strong> @Model.Email</p>
+                        <p><strong>Phone:</strong> @Model.Phone</p>
+                        <p><strong>Address:</strong> @Model.Street, @Model.Region, @Model.City, @Model.State</p>
+                        <p><strong>Gender:</strong> @Model.Gender</p>
+                        <p><strong>Date of Birth:</strong> @Model.DateOfBirth</p>
+                        <p><strong>National ID Number:</strong> @Model.PersonalNationalIDNumber</p>
+                        <p><strong>Marital Status:</strong> @Model.MaritalStatus</p>
+                        <p><strong>Salary:</strong> @Model.Salary</p>
+                        <p><strong>Work Duration:</strong> @Model.StartWork - @Model.EndWork</p>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-4 text-center">
+                        <h5>National ID Card</h5>
+                        <img src="~/Files/Images/PharmacyDelivery/@Model.PersonalNationalIDCard" alt="National ID Card" class="img-fluid rounded" style="max-width:200px; max-height:200px;" />
+                    </div>
+                </div>
+                <div class="mt-4 text-center">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" asp-route-pageNumber="@ViewBag.currentPage"  class="btn btn-primary">Edit</a>
+                    <a asp-action="Index" asp-route-pageNumber="@ViewBag.currentPage" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

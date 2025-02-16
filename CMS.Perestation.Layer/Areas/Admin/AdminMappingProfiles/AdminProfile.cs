@@ -51,6 +51,7 @@ namespace CMS.Perestation.Layer.Areas.Admin.AdminMappingProfiles
             CreateMap<PharmacyOrder, PharmacyOrderVM>().ReverseMap();
             CreateMap<PharmacyCustomer, PharmacyCustomerVM>().ReverseMap();
             CreateMap<PharmacyDeliveryRepresentative, PharmacyDeliveryRepresentativeVM>().ReverseMap();
+            CreateMap<MedicineOrder, MedicineOrderVM>().ReverseMap();
 
 
         }

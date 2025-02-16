@@ -1,85 +1,130 @@
-﻿@using CMS.Models.CuraHub.PharmacySection
-@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.MedicineVM
+﻿@using CMS.Models.Enums
+@using CMS.Utitlities.StaticData
+@model CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.CategoriesAndManufactoriesVM
 
 @{
-    ViewData["Title"] = "Edit Medicine";
+    Layout = "~/Views/Shared/_CuraHubLayout.cshtml";
 }
 
 <div class="container mt-5">
-    <h1>@ViewData["Title"]</h1>
+    <h1>Edit Medicine</h1>
     <div class="card shadow p-4 rounded">
-        <form asp-action="Edit" method="post" enctype="multipart/form-data" >
-            <input type="hidden" asp-for="Id" value="@Model.Id"/>
-            <div class="form-group ">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <form asp-action="Edit" class="needs-validation" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="MedicinesVM.Id" />
+            <input type="hidden" name="pageNumber" value="@ViewBag.currentPage" />
+
+            <div class="form-group">
+                <label asp-for="MedicinesVM.Name" class="control-label"></label>
+                <input asp-for="MedicinesVM.Name" class="form-control" />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="MedicinesVM.Name"></span>
+                </div>
             </div>
 
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="MedicinesVM.Description" class="control-label"></label>
+                <textarea asp-for="MedicinesVM.Description" class="form-control"></textarea>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="MedicinesVM.Description"></span>
+                </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-6">
-                    <label asp-for="Price" class="control-label"></label>
-                    <input asp-for="Price" class="form-control" type="number" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <label asp-for="MedicinesVM.Price" class="control-label"></label>
+                    <input asp-for="MedicinesVM.Price" class="form-control" type="number" />
+                    <div class="invalid-feedback">
+                        <span asp-validation-for="MedicinesVM.Price"></span>
+                    </div>
                 </div>
 
                 <div class="form-group col-6">
-                    <label asp-for="Quantity" class="control-label"></label>
-                    <input asp-for="Quantity" class="form-control" type="number" />
-                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                    <label asp-for="MedicinesVM.Quantity" class="control-label"></label>
+                    <input asp-for="MedicinesVM.Quantity" class="form-control" type="number" />
+                    <div class="invalid-feedback">
+                        <span asp-validation-for="MedicinesVM.Quantity"></span>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="form-group row">
                 <div class="col-md-6 mb-3">
-                    <label asp-for="MedicineManufactoryId" class="form-label">Select Manufactory</label>
-                    <select class="form-control" asp-for="MedicineManufactoryId">
+                    <label asp-for="MedicinesVM.MedicineManufactoryId" class="control-label">Select Manufactory</label>
+                    <select class="form-control" asp-for="MedicinesVM.MedicineManufactoryId">
                         <option value="">Select Manufactory</option>
-                        @foreach (var item in (List<MedicineManufactory>)ViewData["MedicineManufactory"])
+                        @foreach (var item in Model.MedicineManufactories)
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
                     </select>
-                    <span asp-validation-for="MedicineManufactoryId" class="text-danger"></span>
+                    <span asp-validation-for="MedicinesVM.MedicineManufactoryId" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label asp-for="PharmacyCategoryId" class="form-label">Select Pharmacy Category</label>
-                    <select class="form-control" asp-for="PharmacyCategoryId">
+                    <label asp-for="MedicinesVM.PharmacyCategoryId" class="control-label">Select Pharmacy Category</label>
+                    <select class="form-control" asp-for="MedicinesVM.PharmacyCategoryId">
                         <option value="">Select Pharmacy Category</option>
-                        @foreach (var item in (List<PharmacyCategory>)ViewData["PharmacyCategory"])
+                        @foreach (var item in Model.PharmacyCategories)
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
                     </select>
-                    <span asp-validation-for="PharmacyCategoryId" class="text-danger"></span>
+                    <span asp-validation-for="MedicinesVM.PharmacyCategoryId" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="File" class="control-label">Upload Image</label>
-                <input type="file" accept="image/*" class="form-control" name="File" id="File" placeholder="File" onchange="previewImage(event)">
-                @* <input asp-for="File" class="form-control w-75" type="file" /> *@
-                @if (Model.Img != null)
-                {
-                    <div class="mt-3 w-25">
-                        <img src="~/Files/Images/@Model.Img" alt="Profile Photo" class="img-thumbnail" style="width: 100px; height: 100px;" />
+
+            <div class="form-group row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MedicinesVM.File" class="control-label">Image</label>
+                    <input type="file" accept="image/*" class="form-control" name="File" id="File" placeholder="File" onchange="previewImage(event)">
+                    @* <input asp-for="MedicinesVM.File" class="form-control" type="file" id="File" onchange="previewImage(event)" /> *@
+                    <div class="invalid-feedback">
+                        <span asp-validation-for="MedicinesVM.File"></span>
                     </div>
-                }
-                <span asp-validation-for="File" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="MedicinesVM.Status" class="control-label">Select Medicine Status</label>
+                    <select class="form-control" asp-for="MedicinesVM.Status">
+                        <option value="">Select Medicine Status</option>
+                        @foreach (var item in MedicinesStatus.Status)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        <span asp-validation-for="MedicinesVM.Status"></span>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Edit</button>
-            <a asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
+
+            <!-- Image Preview -->
+            @if (!string.IsNullOrEmpty(Model.MedicinesVM.Img))
+            {
+                <div id="imagePreview" class="mt-3 w-25">
+                    <img id="previewImg" src="~/Files/Images/Medicines/@Model.MedicinesVM.Img" class="img-thumbnail" style="width: 100px; height: 100px;" />
+                </div>
+            }
+            else
+            {
+                <div id="imagePreview" class="mt-3 w-25" style="display: none;">
+                    <img id="previewImg" class="img-thumbnail" style="width: 100px; height: 100px;" />
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary mt-3">Save</button>
+            <a asp-action="Index" asp-route-pageNumber="@ViewBag.currentPage" class="btn btn-secondary mt-3">Cancel</a>
         </form>
     </div>
 </div>
 
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(event) {
+            var preview = document.getElementById("previewImg");
+            var previewContainer = document.getElementById("imagePreview");
+
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            previewContainer.style.display = "block";
+        }
+    </script>
 }

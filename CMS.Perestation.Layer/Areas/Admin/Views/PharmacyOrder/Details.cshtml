@@ -1,30 +1,93 @@
-﻿@using System.Collections.Generic;
-@using CMS.Models.Enums;
-@using CMS.Models.CuraHub.PharmacySection.PharmacySectionVM;
-@model PharmacyOrderVM
+﻿@model List<CMS.Models.CuraHub.PharmacySection.PharmacySectionVM.MedicineOrderVM>
 
 @{
-    ViewData["Title"] = "Pharmacy Order Details";
+    Layout = "~/Views/Shared/_CuraHubLayout.cshtml";
 }
 
-<div class="container mt-5">
-    <h2>@ViewData["Title"]</h2>
-    <div class="card shadow p-4 rounded">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Order Details</h3>
-                <p><strong>Order Id:</strong> @Model.Id</p>
-                <p><strong>Quantity:</strong> @Model.Quentity</p>
-                <p><strong>Discount:</strong> @Model.Discount</p>
-                <p><strong>Total Price:</strong> @Model.TotalPrice</p>
-                <p><strong>Shipment Status:</strong> @Model.ShipmentStatus</p>
-                <p><strong>Customer:</strong> @Model.PharmacyCustomer?.FirstName @Model.PharmacyCustomer?.LastName</p>
-                <p><strong>Delivery Representative:</strong> @Model.PharmacyDeliveryRepresentative?.FirstName @Model.PharmacyDeliveryRepresentative?.LastName</p>
+<div class="container mt-4">
+    <!-- Page Header with Cancel Order Button -->
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <h2 class="text-primary fw-bold">
+            <i class="fa-solid fa-file-invoice-dollar me-2"></i> Order Details
+        </h2>
+        <a asp-action="CancelOrder" asp-route-id="@Model.FirstOrDefault()?.PharmacyOrder.Id" asp-route-pageNumber="@ViewBag.currentPage" class="btn btn-outline-danger btn-lg shadow-sm">
+            <i class="fa-solid fa-times-circle me-2"></i> Cancel Order
+        </a>
+    </div>
+
+    <!-- Order Information -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+            <h4 class="mb-0"><i class="fa-solid fa-receipt me-2"></i> Order Information</h4>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6"><p><i class="fa-solid fa-hashtag text-secondary me-2"></i><strong>Order ID:</strong> @Model.FirstOrDefault()?.PharmacyOrder.Id</p></div>
+                <div class="col-md-6"><p><i class="fa-solid fa-calendar-days text-info me-2"></i><strong>Order Date:</strong> @Model.FirstOrDefault()?.PharmacyOrder.DateTime.ToString("yyyy-MM-dd")</p></div>
+                <div class="col-md-6"><p><i class="fa-solid fa-user text-success me-2"></i><strong>Customer:</strong> @Model.FirstOrDefault()?.PharmacyOrder.PharmacyCustomer.FirstName @Model.FirstOrDefault()?.PharmacyOrder.PharmacyCustomer.LastName</p></div>
+                <div class="col-md-6"><p><i class="fa-solid fa-percent text-warning me-2"></i><strong>Discount:</strong> <span class="badge bg-warning text-dark">@Model.FirstOrDefault()?.PharmacyOrder.Discount%</span></p></div>
             </div>
         </div>
-        <div class="mt-4">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+
+    <!-- Delivery, Address, and Shipment Status -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white d-flex align-items-center">
+            <h4 class="mb-0"><i class="fa-solid fa-truck me-2"></i> Delivery & Shipment Details</h4>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row g-3">
+                <div class="col-md-6"><strong>Delivery Rep:</strong> @Model.FirstOrDefault()?.PharmacyOrder.PharmacyDeliveryRepresentative?.FirstName @Model.FirstOrDefault()?.PharmacyOrder.PharmacyDeliveryRepresentative?.LastName</div>
+                <div class="col-md-6"><strong>Address:</strong> @Model.FirstOrDefault()?.PharmacyOrder.PharmacyCustomer.Region, @Model.FirstOrDefault()?.PharmacyOrder.PharmacyCustomer.State, @Model.FirstOrDefault()?.PharmacyOrder.PharmacyCustomer.City, @Model.FirstOrDefault()?.PharmacyOrder.PharmacyCustomer.Street</div>
+                <div class="col-md-12">
+                    <strong>Shipment Status:</strong> <span class="badge bg-info text-white">@Model.FirstOrDefault()?.PharmacyOrder.ShipmentStatus</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medicines in Order -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-success text-white d-flex align-items-center">
+            <h4 class="mb-0"><i class="fa-solid fa-pills me-2"></i> Medicines in Order</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover table-bordered table-striped text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th><i class="fa-solid fa-capsules me-2"></i> Name</th>
+                        <th><i class="fa-solid fa-dollar-sign me-2"></i> Price</th>
+                        <th><i class="fa-solid fa-sort-numeric-up me-2"></i> Quantity</th>
+                        <th><i class="fa-solid fa-money-bill-wave me-2"></i> Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var medicineOrder in Model)
+                        {
+                            <tr>
+                                <td>@medicineOrder.Medicine.Name</td>
+                                <td>@medicineOrder.Medicine.Price EGP</td>
+                                <td>@medicineOrder.MedicineCount</td>
+                                <td><strong>@(medicineOrder.Medicine.Price * medicineOrder.MedicineCount) EGP</strong></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-muted">No medicines found in this order.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <h5 class="text-center text-success mt-3">
+                <strong>
+                    <i class="fa-solid fa-calculator me-2"></i> 
+                    Total Price: @(Model.Sum(m => m.Medicine.Price * m.MedicineCount)) EGP
+                </strong>
+            </h5>
         </div>
     </div>
 </div>

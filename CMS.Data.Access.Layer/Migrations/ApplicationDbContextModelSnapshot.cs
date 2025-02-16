@@ -1748,6 +1748,11 @@ namespace CMS.Data.Access.Layer.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .HasMaxLength(50)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MedicineManufactoryId");
@@ -2004,6 +2009,9 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -2054,6 +2062,8 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.ToTable("PharmacyCustomers", "Pharmacy");
                 });
 
@@ -2070,7 +2080,6 @@ namespace CMS.Data.Access.Layer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BloodType")
-                        .IsRequired()
                         .HasMaxLength(5)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(5)");
@@ -2184,13 +2193,10 @@ namespace CMS.Data.Access.Layer.Migrations
                     b.Property<double>("Discount")
                         .HasColumnType("float");
 
-                    b.Property<int>("OrderCount")
+                    b.Property<int?>("PharmacyCustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PharmacyCustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PharmacyDeliveryRepresentativeId")
+                    b.Property<int?>("PharmacyDeliveryRepresentativeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quentity")
@@ -2201,6 +2207,9 @@ namespace CMS.Data.Access.Layer.Migrations
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -2667,19 +2676,25 @@ namespace CMS.Data.Access.Layer.Migrations
                     b.Navigation("Medicine");
                 });
 
+            modelBuilder.Entity("CMS.Models.CuraHub.PharmacySection.PharmacyCustomer", b =>
+                {
+                    b.HasOne("CMS.Models.CuraHub.IdentitySection.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("CMS.Models.CuraHub.PharmacySection.PharmacyOrder", b =>
                 {
                     b.HasOne("CMS.Models.CuraHub.PharmacySection.PharmacyCustomer", "PharmacyCustomer")
                         .WithMany("PharmacyOrders")
                         .HasForeignKey("PharmacyCustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CMS.Models.CuraHub.PharmacySection.PharmacyDeliveryRepresentative", "PharmacyDeliveryRepresentative")
                         .WithMany("PharmacyOrders")
-                        .HasForeignKey("PharmacyDeliveryRepresentativeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PharmacyDeliveryRepresentativeId");
 
                     b.Navigation("PharmacyCustomer");
 

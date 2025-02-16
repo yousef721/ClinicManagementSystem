@@ -29,7 +29,7 @@
                                 <td data-th="Product">
                                     <div class="row">
                                         <div class="col-md-3 text-left" style="width: 15%;">
-                                            <img src="~/Files/images/@product.Medicine.Img" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow">
+                                            <img src="~/Files/Images/Medicines/@product.Medicine.Img" alt="" class="img-fluid d-none d-md-block rounded mb-2 shadow">
                                         </div>
                                         <div class="col-md-9 text-left mt-sm-2">
                                             <h4>@product.Medicine.Name</h4>
@@ -61,22 +61,18 @@
                 </table>
                 <div class="float-right text-right d-flex align-items-center justify-content-center gap-2">
                     <h4>Total Price:</h4>
-                    @{
-                        var total = 0.00;
-                        foreach (var product in Model)
-                        {
-                            total += product.Medicine.Price * product.count;
-                        }
-                    }
-                    <h1>@total </h1>
-                    <h2 style="display: inline-block;">EGP</h2>
+                    @{ var total = Model.Sum(product => product.Medicine.Price * product.count); }
+                    <h1 id="totalPrice">@total.ToString("F2") EGP</h1>
                 </div>
             </div>
         </div>
         <div class="row mt-4 d-flex align-items-center">
-            <div class="col-sm-6 order-md-2 text-right">
-                <a href="/Customer/CuraHub/Pharmacy/PharmacyCart/Pay" class="btn btn-primary mb-4 btn-lg pl-5 pr-5">Checkout</a>
-            </div>
+            @if (Model.Count > 0)
+            {
+                <div class="col-sm-6 order-md-2 text-right">
+                    <a id="checkoutBtn" class="btn btn-primary mb-4 btn-lg pl-5 pr-5">Checkout</a>
+                </div>
+            }
             <div class="col-sm-6 mb-3 mb-m-1 order-md-1 text-md-left">
                 <a href="/Customer/CuraHub/Pharmacy/index">
                     <i class="fas fa-arrow-left mr-2"></i> Continue Shopping
@@ -90,52 +86,36 @@
   </div>
 </section>
 
-<style>
-    .btn {
-        border-radius: 10px;
-    }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
-</style>
-
 <script>
-
-    @* $(document).ready(function () {
+    $(document).ready(function () {
         $("#checkoutBtn").click(function () {
             $.get("/Customer/CuraHub/Pharmacy/PharmacyCart/SummaryOrder", function (data) {
                 $("#checkoutContainer").html(data);
+            });
         });
-    });
 
-    $(document).on("submit", "#checkoutForm", function (event) {
-        event.preventDefault();
-        var form = $(this);
-        $.ajax({
-            url: form.attr("action"),
-            type: "POST",
-            data: form.serialize(),
-            success: function (response) {
-                if (response.success) {
-                    alert(response.message);
-                    $("#checkoutContainer").html("");
-                } else {
-                    $("#checkoutContainer").html(response);
-                }
-            },
-            error: function () {
+        $(document).on("submit", "#checkoutForm", function (event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $("#checkoutContainer").html("");
+                    } else {
+                        $("#checkoutContainer").html(response);
+                    }
+                },
+                error: function () {
                     alert("An error occurred. Please try again.");
                 }
             });
         });
-    }); *@
+    });
 
-    // Function to update the cart (Add, Plus, Minus, Delete)
     function updateCart(medicineId, action, event) {
         event.preventDefault();
         $.ajax({
@@ -144,33 +124,13 @@
             data: { medicineId: medicineId },
             success: function(response) {
                 if (response) {
-                    let countElement = $("#count-" + medicineId);
-                    let plusButton = $("#plus-" + medicineId);
-                    let minusButton = $("#minus-" + medicineId);
-                    let deleteButton = $("#delete-" + medicineId);
-
-                    // Update the count displayed
-                    countElement.val(response.count);
-
-                    // Show/hide buttons based on count
-                    if (response.count > 0) {
-                        plusButton.show();
-                        if (response.count == 1) {
-                            minusButton.hide();
-                            deleteButton.show();
-                        } else {
-                            minusButton.show();
-                            deleteButton.hide();
-                        }
-                    } else {
-                        plusButton.hide();
-                        minusButton.hide();
-                        deleteButton.hide();
-                    }
-
-                    // Update the total price
+                    $(`#count-${medicineId}`).val(response.count);
+                    toggleButtons(medicineId, response.count);
                     updateTotalPrice();
                 }
+            },
+            error: function () {
+                alert("Failed to update the cart. Please try again.");
             }
         });
     }
@@ -182,8 +142,7 @@
             type: "POST",
             data: { medicineId: medicineId },
             success: function() {
-                // Hide the cart item and update total price
-                $("#cart-item-" + medicineId).remove();
+                $(`#cart-item-${medicineId}`).remove();
                 updateTotalPrice();
             }
         });
@@ -196,9 +155,6 @@
             let price = parseFloat($(this).find("td:eq(1)").text());
             total += price * quantity;
         });
-        $(".float-right h1").text(total.toFixed(2));
+        $("#totalPrice").text(total.toFixed(2) + " EGP");
     }
-
-
-
 </script>

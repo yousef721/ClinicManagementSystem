@@ -24,6 +24,11 @@ namespace CMS.Data.Access.Layer.Data.Configrations.CuraHubConfigration.PharmacyC
                  .HasMaxLength(1000)
                  .IsUnicode(true);
 
+            builder.Property(e => e.Status)
+                 .IsRequired(false)
+                 .HasMaxLength(50)
+                 .IsUnicode(true);
+
 
             builder.Property(e => e.Img)
                 .IsRequired()

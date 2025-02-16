@@ -24,6 +24,7 @@
             <a class="text-decoration-none" href="/Customer/CuraHub/Pharmacy/Medicine/Index">
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body text-center">
+                        <img src="~/Files/Images/Medicines/Logo.webp" class="img-fluid mb-2" style="height: 100px; width: auto; object-fit: contain;">
                         <h5 class="card-title">All Medicine</h5>
                     </div>
                 </div>
@@ -35,6 +36,7 @@
                 <a class="text-decoration-none" href="/Customer/CuraHub/Pharmacy/Medicine/Index?categoryId=@category.Id">
                     <div class="card mb-4 shadow-sm">
                         <div class="card-body text-center">
+                            <img src="~/Files/images/Medicines/@category.Img" alt="@category.Name" class="img-fluid mb-2" style="height: 100px; width: auto; object-fit: contain;">
                             <h5 class="card-title">@category.Name</h5>
                         </div>
                     </div>
@@ -45,10 +47,6 @@
 </div>
 
 <style>
-    .container {
-        margin-top: 20px;
-        position: relative;
-    }
     .list-group-item {
         cursor: pointer;
     }
@@ -64,45 +62,66 @@
         max-height: 200px;
         overflow-y: auto;
     }
+    .pharmacy-card {
+        width: 100%; 
+        height: 250px;
+        overflow: hidden; 
+        border-radius: 10px;
+    }
+
+    .pharmacy-card img {
+        width: 100%; 
+        height: 180px; 
+        object-fit: cover; 
+    }
+
+    .pharmacy-card .card-body {
+        height: 70px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+
 </style>
 
 <script>
-$(document).ready(function () {
-    const searchInput = $("#searchInput");
-    const searchResultsContainer = $("#searchResultsContainer");
+    $(document).ready(function () {
+        const searchInput = $("#searchInput");
+        const searchResultsContainer = $("#searchResultsContainer");
 
-    // Function to fetch and display search results
-    function fetchSearchResults() {
-        const searchText = searchInput.val().trim();
-
-        if (searchText.length > 0) {
-            $.ajax({
-                url: "/Customer/CuraHub/Pharmacy/SearchMedicines",
-                type: "GET",
-                data: { searchText: searchText },
-                success: function (data) {
-                    searchResultsContainer.html(data);
-                }
-            });
-        } else {
-            searchResultsContainer.html("");
+        function fetchSearchResults() {
+            const searchText = searchInput.val().trim();
+            if (searchText.length > 0) {
+                $.ajax({
+                    url: "/Customer/CuraHub/Pharmacy/SearchMedicines",
+                    type: "GET",
+                    data: { searchText: searchText },
+                    success: function (data) {
+                        searchResultsContainer.html(data);
+                    }
+                });
+            } else {
+                searchResultsContainer.html("");
+            }
         }
-    }
 
-    // Event listener for input typing
-    searchInput.on("input", fetchSearchResults);
+        searchInput.on("input", fetchSearchResults);
 
-    // Select medicine from list
-    window.selectMedicine = function (name) {
-        searchInput.val(name);
-        searchResultsContainer.html("");
-    };
-
-    // Click event for dynamically created elements
-    $(document).on("click", function (event) {
-        if (!searchInput.is(event.target) && !searchResultsContainer.is(event.target) && searchResultsContainer.has(event.target).length === 0) {
+        window.selectMedicine = function (name) {
+            searchInput.val(name);
             searchResultsContainer.html("");
-        }
-    });
+        };
+
+        $(document).on("click", function (event) {
+            if (!searchInput.is(event.target) && !searchResultsContainer.is(event.target) && searchResultsContainer.has(event.target).length === 0) {
+                searchResultsContainer.html("");
+            }
+        });
     });
 </script>
+

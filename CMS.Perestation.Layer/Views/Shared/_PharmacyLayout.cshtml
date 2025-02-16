@@ -183,7 +183,6 @@
                                                     </div>
                                                     <div class="col-8">
                                                         @user?.FirstName @user?.LastName
-
                                                     </div>
                                                 </div>
                                             </a>
@@ -193,6 +192,15 @@
                                                 <div class="row">
                                                     <div class="col-4"></div>
                                                     <div class="col-8">My Appointments</div>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="dropdown-item" asp-area="Customer" asp-controller="Pharmacy" asp-action="UserOrders">
+                                                <div class="row">
+                                                    <div class="col-4"></div>
+                                                    <div class="col-8">My Orders</div>
                                                 </div>
                                             </a>
                                         </li>
@@ -278,22 +286,3 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-<script>
-    @* function getCartCount() {
-        $.ajax({
-            url: '/Customer/CuraHub/Pharmacy/PharmacyCart/GetCartCount',
-            type: 'GET',
-            success: function (response) {
-                if (response) {
-                    $('#cart-count-nav').text(response.count);
-                }
-            }
-        });
-    }
-
-    $(document).ready(function () {
-        getCartCount();
-    });
-
-    setInterval(getCartCount, 1000); // Refresh every 10 seconds *@
-</script>

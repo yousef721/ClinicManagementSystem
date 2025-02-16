@@ -31,6 +31,10 @@
     <Folder Include="Areas\Staff\Data\" />
     <Folder Include="Areas\Staff\Models\" />
     <Folder Include="Areas\Staff\Views\" />
+    <Folder Include="wwwroot/Files/Images/DeliveryPharmacy/" />
+    <Folder Include="wwwroot/Files/Images/Medicines/" />
+    <Folder Include="wwwroot/Files/Images/PharmacyCategories/" />
+    <Folder Include="wwwroot/Files/Images/PharmacyDelivery/" />
     <Folder Include="wwwroot\Files\Images\PatientPictures\" />
   </ItemGroup>
 
